@@ -32,18 +32,124 @@ find_by - we retrive date using any attributes. nil if no matching record
 find_by!- ActiveRecord::RecordNotFound if no matching record is found.
 
 Retrieving Multiple Objects in Batches
-
-
+Customer.all.each - if directly itrate over each then it will take to much memory if table is to big 
+that is why we are using find_each, find_in_batches
+- find_each - This method retrieves records one by one, yielding each record to the block provided.
+- find_in_batches - This method retrieves records in batches, yielding each batch of records to the block provided.
+- optinos 
+ :batch_size -by default it is 1000 but we can also change  
+ :start - we can define from which id we have to start
+ :finish - until which id want in processing
+ :error_on_ignore
 
 #Conditions, Pure String Conditions, Array Conditions, Hash Conditions, NOT Conditions, OR Conditions  
+- Array Conditions - Book.where("title = ?", params[:title]) - if directly pass this params in string then it is risk for our database - Book.where("title = #{params[:title]}")
+- we can also do it with key/hash 
+- sanitize_sql_like is used to escape wildecard - % - \% - convert special charecter to literal charecter
+
+#Hash Conditions
+Only equality, range, and subset checking are possible with Hash conditions.
+
+- subset condition - Customer.where(orders_count: [1,3,5])
+- Not condition - Customer.where.not(orders_count: [1,3,5])
+- OR condition - Customer.where(last_name: 'Smith').or(Customer.where(orders_count: [1,3,5]))
+- And condition - Customer.where(last_name: 'Smith').where(orders_count: [1,3,5])), Customer.where(id: [1, 2]).and(Customer.where(id: [2, 3]))
+
 #Ordering 
+Book.order(:created_at) - by default it is ascending order
+Book.order(created_at: :desc) - decending order
+Book.order(title: :asc, created_at: :desc) - ordering by multiple field
+ 
 #Selecting Specific Fields
+Book.select(:isbn, :out_of_print)
+Customer.select(:last_name).distinct - give uniq value
+
+Returns unique last_names
+query = Customer.select(:last_name).distinct
+
+Returns all last_names, even if there are duplicates
+query.distinct(false)
+
+
 #Limit and Offset  
+Customer.limit(5) - return 5 customer
+Customer.limit(5).offset(30)
+will return instead a maximum of 5 customers beginning with the 31st
+
 #Group Total of grouped items  
+it is provide same group of record in single entity
+Order.select("created_at").group("created_at")
+Order.group(:status).count - provide count of all group of same record in hash
+
+
 #Having 
+SQL uses the HAVING clause to specify conditions on the GROUP BY fields.
+Order.select("created_at, sum(total) as total_price").group("created_at").having("sum(total) > ?", 200)
+  
+  
 #Overriding Conditions: unscope, only, reselect, reorder, reverse_order, rewhere 
+- unscope - You can specify certain conditions to be removed
+Book.where('id > 100').limit(20).order('id desc').unscope(:order)
+- only - You can also override conditions using the only
+Book.where('id > 10').limit(20).order('id desc').only(:order, :where)
+- reselect - The reselect method overrides an existing select statement. 
+- reorder - The reorder method overrides the default scope order.
+- reverse_order - The reverse_order method reverses the ordering clause if specified.
+- rewhere - The rewhere method overrides an existing, named where condition.
+
+
 #Null Relation 
+None - The none method returns a chainable relation with no records. 
+Book.none
+
 #Readonly Objects 
+customer = Customer.readonly.first
+customer.visits += 1
+customer.save
+ActiveRecord::ReadOnlyRecord exception when calling customer.save
+
+
 #Locking Records for Update Optimistic Locking Pessimistic Locking  
+prevent conflicts that can occur when multiple users try to access and modify the same resource at the same time.
+
+- Optimistic Locking
+ it prevent give error ActiveRecord::StaleObjectError if record is alread is updated and other is trying to update at same object
+ It works by adding a special column to the database table, typically named lock_version
+	 
+- Pessimistic Locking
+ here if one user is updateing record at the time if other user is trying to update record than it will not give that permission to update
+ ActiveRecord::LockTimeout that excption is raise.
+ 
+ 
 #Find or Build a New Object, find_or_create_by, find_or_create_by!, find_or_initialize_by  
+- find_or_create_by -  method checks whether a record with the specified attributes exists. If it doesn't, then create is called.
+- find_or_create_by! - raise exception if new record is invalid
+- find_or_initialize_by - iis is work as new method. we have save record
+
 #Finding by SQL select_all pluck ids 
+- find_by_sql
+If you'd like to use your own SQL to find records in a table you can use find_by_sql. we can write sql query inside bracket	
+- select_all
+select_all will retrieve objects from the database using custom SQL just like find_by_sql
+- pluck
+It accepts a list of column names as an argument and returns an array of values of the specified columns with the corresponding data type.
+Customer.ids
+
+
+#advance active record query insterface
+
+#Joining Tables
+#joins(inner Join, left outer /right outer / full outer)
+#Eager Loading Associations
+#Eager Loading Multiple Associations
+#N+1 problem and how to avoid that?
+#Specifying Conditions on Eager Loaded Associations
+#Scopes, Passing in arguments, Using conditionals, Applying a default scope, Merging of scopes
+#Removing All Scoping
+#Dynamic Finders
+#Enums
+#Understanding Method Chaining: Retrieving filtered data from multiple tables, Retrieving specific data from multiple tables
+#Existence of Objects
+#Calculations: Count, Average, Minimum, Maximum, Sum
+#Running EXPLAIN and Interpreting EXPLAIN
+
