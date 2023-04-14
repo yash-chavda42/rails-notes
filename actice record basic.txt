@@ -1,0 +1,82 @@
+#to creare database and process
+rails db:create     - create database
+rails db:migration  -update changes in schema file, to add column, etc menas change schema file
+rails generate model User name:string number:integer
+rails g migration AddEmailToUser - to add email generate migartion email:string
+rails d migration AddEmailToUser - delete that migration
+
+#to change primary key or table name of table in model file
+self.primary_key=""
+self.table_name=""
+
+console - in rails console we can do crud operation
+reload! - to reload console
+User.last  - fetch last column data
+User.First - fetch first column data
+User.primary_key - give the primary key of table
+self.primary_key="email" in model file.rb file- to change primary key of table
+user=User.new(name:"yash",age:22) - to add data
+user.save - it will save the changes
+
+another way is
+user=User.new
+user.name="yash"
+user.save
+user.create - no need to save 
+
+#reading record methods
+all,find,where,first,last
+example - User.where(name:"yash")
+
+
+#update record methods
+update, find_by,update_all
+user=User.last -first fetch data for update
+user.update.(name:"name") -and then update particuler parameter
+
+
+#deleting record methods
+delete,destroy,destroy_all,destroy_by.
+
+#what is active record
+it is interface that rails give you between apllication and database.it struct your data model for your user
+it is pattern that used to access the data stored in relational database. it allow to perform the crud opration.
+
+#ORM -object relational mapping - in ruby it is done through active record 
+ORM provide by active records automatically converts object into contructs that  can be stored in databse 
+we are using active record as orm frame work
+it is bridge between object and table
+class - tables
+object - records(row in table)
+attributes-record in value(columns in table)
+
+#Active Record in rails
+ActiveRecord:Base.establish_connection - connect rail application to database.
+ActiveRecord:Migration - to updata schema file.
+ActiveRecord:Schema.define - inspect the database.
+
+#convention over configuration
+naming conventions
+Model class - singuler camlecase(User, UserJob).
+database table -pural and sankecase.
+column name - singuler_snake_case
+
+schema convention
+primary key - by default id
+foreign key - singular table name_id
+
+
+#Migration
+it is script that tell rails how you want to set up changes in database. it avoid manually writing sql code to create database 
+
+#validation
+we can add validation for validate data and we can also create out custom validate based on case.
+validates :name, :price, presence:true
+
+#callback
+callbacks are method that called at certain moments of an object lifecycle
+before validation
+after validation
+before save
+after save
+

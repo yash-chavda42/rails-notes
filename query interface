@@ -1,0 +1,49 @@
+#Learn about SQL(Data types, Primary key, Foreign key, DDL, DML, Select queries, Joins) 
+INT or INTEGER: for integer values.
+FLOAT or REAL: for decimal or floating-point values.
+DECIMAL or NUMERIC: for fixed-point decimal values.
+CHAR or CHARACTER: for fixed-length character strings.
+VARCHAR or CHARACTER VARYING: for variable-length character strings.
+TEXT: for large variable-length character strings.
+DATE: for date values.
+TIME: for time values.
+TIMESTAMP: for date and time values.
+BOOLEAN: for boolean (true/false) values.
+BLOB or BINARY LARGE OBJECT: for binary data such as images or files.
+ARRAY: for arrays of values.
+JSON: for storing JSON data.
+
+DDL - Data Defination Language - create, alter, drop, truncate
+DML - Date Manipulation Language - select, insert, update, delete
+
+
+#What is the Active Record Query Interface? 
+Active Record will perform queries on the database for you and is compatible with most database systems, including MySQL, MariaDB, PostgreSQL, and SQLite.
+
+#Retrieving Objects from the Database Retrieving a Single Object, Retrieving Multiple Objects in Batches 
+find   	- using primary key we can retrive date. ActiveRecord::RecordNotFound if record is not found
+take   	- The take method retrieves a record without any implicit ordering. The take method returns nil if no record is found and no exception will be raised.
+take!  	- ActiveRecord::RecordNotFound if no matching record is found.
+first  	- fetch record ordered by primary key. returns nil if no matching record is found
+first! 	- ActiveRecord::RecordNotFound if no matching record is found.
+last	- finds the last record ordered by primary key. nil if no matching record
+last! 	- ActiveRecord::RecordNotFound if no matching record is found.
+find_by - we retrive date using any attributes. nil if no matching record
+find_by!- ActiveRecord::RecordNotFound if no matching record is found.
+
+Retrieving Multiple Objects in Batches
+
+
+
+#Conditions, Pure String Conditions, Array Conditions, Hash Conditions, NOT Conditions, OR Conditions  
+#Ordering 
+#Selecting Specific Fields
+#Limit and Offset  
+#Group Total of grouped items  
+#Having 
+#Overriding Conditions: unscope, only, reselect, reorder, reverse_order, rewhere 
+#Null Relation 
+#Readonly Objects 
+#Locking Records for Update Optimistic Locking Pessimistic Locking  
+#Find or Build a New Object, find_or_create_by, find_or_create_by!, find_or_initialize_by  
+#Finding by SQL select_all pluck ids 

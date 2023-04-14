@@ -1,0 +1,14 @@
+inside model
+validates :name, presence: true.	- data should be present
+validates :terms_of_service, acceptance: true	- checkbox should be fill like term and condition.
+validates :terms_of_service, acceptance: { message: 'must be abided' }	- with custom message
+Person.create(name: "John Doe").valid? - to check valid or not.
+.valid? 	- to check valid or not.
+.invalid	- inverse of valid.
+.new_record? 	- it will give true if object is not created before save method
+save(validate: false) - it will save although without any validation
+any errors found can be accessed through the errors instance method, 
+error is collection of errors
+p.errors.size	- give
+p.errors.objects.first.full_message
+save!  create! 	- give exception if any

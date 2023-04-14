@@ -1,0 +1,162 @@
+After the router has determined which controller to use for a request, the controller is responsible for making sense of the request and producing the appropriate output.
+A controller can thus be thought of as a middleman between models and views.
+
+#A controller is a Ruby class which inherits from ApplicationController - ApplicationController inherits from ActionController::Base, which defines a number of helpfull methods.
+#helper method provide by actioncontroller:base
+params: Returns a hash containing the parameters passed in the request. This includes both GET and POST parameters.
+render: Renders a view or a template, or a partial, as a response to the request.
+redirect_to: Redirects the browser to a different URL.
+session: Provides access to the session object, which allows you to store data between requests.
+cookies: Provides access to the cookies sent with the request or allows you to set new cookies to be sent with the response.
+request: Provides access to the request object, which contains information about the current request.
+response: Provides access to the response object, which allows you to modify the response headers and status.
+before_action: A method that allows you to define a filter that will be run before a specific controller action.
+after_action: A method that allows you to define a filter that will be run after a specific controller action.
+flash: Provides a way to store a temporary message in the session that can be displayed to the user on the next request.
+authenticate_user!: A method that can be used to require authentication before a controller action is executed.
+
+
+#Only public methods are callable as actions. It is a best practice to lower the visibility of methods (with private or protected) which are not intended to be actions
+#Some method names are reserved by Action Controller. Accidentally redefining them as actions, or even as auxiliary methods, could result in SystemStackError.
+
+
+#parameters
+- 2 types of parameter possible in webapplication
+- The first are parameters that are sent as part of the URL, called query string parameters.
+- The second type of parameter is usually referred to as POST data.
+- both are available in the params hash in your controller
+
+#Hash and Array Parameters
+GET /clients?ids[]=1&ids[]=2&ids[]=3 - this is how we can send array
+The value of params[:ids] will now be ["1", "2", "3"] 
+
+#json parameter
+Content-Type" header of your request is set to "application/json"
+
+#routing paramter 
+The params hash will always contain the :controller and :action keys, but you should use the methods controller_name and action_name instead to access these values. 
+
+#default_url_options
+You can set global default parameters for URL generation by defining a method called default_url_options in your controller.
+Note that default_url_options is typically used for setting default options for URL generation -host, port, protocol.
+
+#Strong Parameters
+  params.require(:post).permit(:title, :body)
+
+
+#Session
+Your application has a session for each user in which you can store small amounts of data that will be persisted between requests. The session is only available in the controller and the view and can use one of several of different storage mechanisms
+- 4 types of session is there
+ActionDispatch::Session::CookieStore - Stores everything on the client.
+ActionDispatch::Session::CacheStore - Stores the data in the Rails cache.
+ActionDispatch::Session::ActiveRecordStore - Stores the data in a database using Active Record (requires the activerecord-session_store gem).
+ActionDispatch::Session::MemCacheStore - Stores the data in a memcached cluster (this is a legacy implementation; consider using CacheStore instead).
+
+All session stores use a cookie to store a unique ID for each session. For most stores, this ID is used to look up the session data on the server
+CookieStore - which stores all session data in the cookie itself. The CookieStore can store around 4 kB of data
+by default rails store session in cookiestore but with only session_id in encrypted formate and find data on server based on this id	
+session[:current_user_id] = user.id
+ession.delete(:current_user_id)
+
+#The Flash
+The flash is a special part of the session which is cleared with each request. This means that values stored there will only be available in the next request, which is useful for passing error messages
+flash[:notice] = "You have successfully logged out."
+flash.keep - If you want a flash value to be carried over to another request.  longer than two requests
+flash.now[:error] = "Could not save client" - if you want message in same request.
+
+#Cookies
+Your application can store small amounts of data on the client - called cookies 
+Rails also provides a signed cookie jar and an encrypted cookie jar for storing sensitive data.
+
+#Rendering XML and JSON data
+format.html # index.html.erb
+format.xml  { render xml: @users }
+format.json { render json: @users }
+      
+#Filters: After Filters and Around Filters, Other Ways to Use Filters
+Filters are methods that are run "before", "after" or "around" a controller action.
+after_action
+before_action :require_login
+skip_before_action
+
+#Request Forgery Protection
+Cross-site request forgery is a type of attack in which a site tricks a user into making requests on another site, possibly adding, modifying, or deleting data on that site without the user's knowledge or permission.
+to avoid this send non-guessable token which is only known to your server to each request along with login details.
+it's available through the method form_authenticity_token 
+
+#The Request and Response Objects: The request Object, The response ObjectHTTP Authentications
+
+- request object
+host		- The hostname used for this request.
+domain(n=2)	- The hostname's first n segments, starting from the right (the TLD).
+format		- The content type requested by the client.
+method		- The HTTP method used for the request.
+get?, post?, patch?, put?, delete?, head?	- Returns true if the HTTP method is GET/POST/PATCH/PUT/DELETE/HEAD.
+headers		- Returns a hash containing the headers associated with the request.
+port		- The port number (integer) used for the request.
+protocol	- Returns a string containing the protocol used plus "://", for example "http://".
+query_string	- The query string part of the URL, i.e., everything after "?".
+remote_ip	- The IP address of the client.
+url		- The entire URL used for the request.
+
+- response object
+body		- This is the string of data being sent back to the client. This is most often HTML.
+status		- The HTTP status code for the response, like 200 for a successful request or 404 for file not found.
+location	- The URL the client is being redirected to, if any.
+content_type	- The content type of the response.
+charset		- The character set being used for the response. Default is "utf-8".
+headers		- Headers used for the response.
+
+#HTTP Basic Authentication, HTTP Digest Authentication, HTTP Token Authentication
+- Basic Authentication
+HTTP basic authentication is an authentication scheme that is supported by the majority of browsers and other HTTP clients.
+consider an administration section which will only be available by entering a username, and a password into the browser's HTTP basic dialog window. Using the built-in authentication is quite easy and only requires you to use one method, http_basic_authenticate_with.
+This method sends the username and password in base64-encoded format with each request. It is not considered secure because the credentials can be easily decoded, but it is still widely used.
+
+- Digest Authentication
+This method is similar to Basic Authentication but adds an extra level of security by sending a hashed response instead of plaintext credentials. It is considered more secure than Basic Authentication.
+
+- Token Authentication
+This method sends an access token with each request, which is used to authenticate the user. It is considered more secure than Basic Authentication because the access token can be easily revoked.
+
+#Streaming and File Downloads: Sending Files, RESTful Downloads
+Sometimes you may want to send a file to the user instead of rendering an HTML page. All controllers in Rails have the send_data and the send_file methods, which will both stream data to the client. send_file is a convenience method that lets you provide the name of a file on the disk, and it will stream the contents of that file for you.
+
+If you want to send a file that already exists on disk, use the send_file method.
+This will read and stream the file 4 kB at the time, avoiding loading the entire file into memory at once. You can turn off streaming with the :stream option or adjust the block size with the :buffer_size option.
+
+#RESTful Downloads
+While send_data works just fine, if you are creating a RESTful application having separate actions for file downloads is usually not necessary. In REST terminology, the PDF file from the example above can be considered just another representation of the client resource. Rails provides an easy and quite sleek way of doing "RESTful downloads". Here's how you can rewrite the example so that the PDF download is a part of the show action, without any streaming:
+
+
+#Live Streaming of Arbitrary Data
+Rails allows you to stream more than just files. In fact, you can stream anything you would like in a response object. The ActionController::Live module allows you to create a persistent connection with a browser. Using this module, you will be able to send arbitrary data to the browser at specific points in time.
+There are a couple of things to notice in the above example. We need to make sure to close the response stream. Forgetting to close the stream will leave the socket open forever. 
+
+
+#Log Filtering: Parameters Filtering, Redirects Filtering
+Rails keeps a log file for each environment in the log folder. These are extremely useful when debugging what's actually going on in your application, but in a live application you may not want every bit of information to be stored in the log file.
+You can filter out sensitive request parameters from your log files by appending them to config.filter_parameters in the application configuration. These parameters will be marked [FILTERED] in the log.
+
+Sometimes it's desirable to filter out from log files some sensitive locations your application is redirecting to. You can do that by using the config.filter_redirect configuration option:
+
+#Rescue: The Default 500 and 404 Templates, rescue_from
+rescue_from - we can do catching error
+hen an exception occurs which is caught by a rescue_from directive, the exception object is passed to the handler. The handler can be a method or a Proc object passed to the :with option. You can also use a block directly instead of an explicit Proc object.
+
+#Force HTTPS protocol
+If you'd like to ensure that communication to your controller is only possible via HTTPS, you should do so by enabling the ActionDispatch::SSL middleware via config.force_ssl in your environment configuration.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

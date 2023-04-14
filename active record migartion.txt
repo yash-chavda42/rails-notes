@@ -1,0 +1,23 @@
+migration is used to evolve the your datbase schema overtime dsl is used for this changes
+#https://riptutorial.com/ruby-on-rails/example/3492/add-a-reference-column-to-a-table - reference link for migration
+
+bydefault it has change method but we can use up and down method for the same
+
+rails g migration AddNameToArticles name - add new column using miration
+
+rails db:migrate:status 	- to check all the migartion status
+rails db:rollback 		- revert last change
+bin/rails db:rollback STEP=3 	- revert last 3 changes
+bin/rails db:rollback VERSION=0	- to rollback all the migration
+bin/rails db:migrate VERSION=20080906120000 	- to migrate until specific version
+bin/rails db:migrate:up VERSION=20080906120000 	- to run specific migration up.
+bin/rails db:migrate:down VERSION=20080906120000 	- to run specific migration down.
+bin/rails db:migrate RAILS_ENV=test 	- to run migration in different environment (test,devlopment)
+bin/rails db:migrate:redo 		- You can rollback and then migrate again using the redo command.This is basically a shortcut that combines rollback and migrate tasks.
+
+bin/rails db:schema:load 	- to load schema file
+bin/rails db:setup  		- setup databse(create databse and load schema)
+bin/rails db:reset  		- equal to - bin/rails db:drop db:setup -drop databse and set it again
+ 
+Polymorphic Associations 		- one model belong to more than one model
+A Polymorphic relationship is where a model can belong to more than one model on a single association.

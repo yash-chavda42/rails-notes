@@ -1,0 +1,8 @@
+belongs_to 		- alone it produce one-directional association. to setup bi-directional declare with has_one or has_many in other model 
+has_one 		- one to one - supplier has only one account
+has_many 		- one to many - one author has many books.
+has_many :through	- many to many with another model.
+has_one :through	- one to one through another model. supplier has one account and each account has one account history.
+has_and_belongs_to_many - direct many to many connection. assembly having many part and each part appearing in any assembly.
+
+polymorphic association - model can belong to more than one other model 

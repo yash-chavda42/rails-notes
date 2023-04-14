@@ -1,0 +1,39 @@
+#javascript bundler in rails - If you are building a Ruby on Rails application and want to use a JavaScript bundler to manage your JavaScript dependencies, there are a few options available to you
+in rails we are using - webpacker gem for manage javascript dependencies- webpacker is a gem that integrates the Webpack bundler with Rails applications. It allows you to use modern JavaScript features like ES6 syntax and React components in your Rails application.
+
+what is differnce between import map and javascript bundler
+- Import maps and JavaScript bundlers are both tools used to manage JavaScript dependencies, but they have different use cases and approaches.
+- An import map is a new feature in modern browsers that allows you to specify the location of JavaScript modules without using a bundler. It allows you to declare mappings between module names and URLs, so that when you import a module, the browser can fetch it from the specified location. Import maps are useful for small to medium-sized applications that don't require complex dependency management or optimization.
+- A JavaScript bundler, on the other hand, is a tool that takes multiple JavaScript files and merges them into a single file, known as a bundle. Bundlers are more powerful than import maps because they can handle more complex use cases, such as tree shaking (removing unused code), code splitting (splitting the code into smaller bundles), and optimizing the code for production. Bundlers are essential for large-scale applications and libraries, where performance and optimization are critical.
+- In summary, import maps are a lightweight solution for simple applications, while JavaScript bundlers are more powerful and flexible for complex applications and libraries.
+
+#why we need npm package with import map and javascript bundler
+- While import maps and JavaScript bundlers are powerful tools for managing dependencies in JavaScript applications, they are not always sufficient on their own.
+- Larger libraries and frameworks often have a lot of dependencies that need to be managed. Using npm packages makes it easier to manage these dependencies, as you can simply install the packages you need using a package manager like npm or Yarn.
+- npm packages often include additional functionality, such as utility functions or pre-built components, that can be easily integrated into your application. This can save you time and effort compared to building these components from scratch.
+- npm packages are often developed and maintained by a community of developers, which means they are regularly updated and improved. Using npm packages can help you stay up-to-date with the latest best practices and technologies.
+- Using npm packages in conjunction with these tools can help simplify dependency management, provide additional functionality, and keep your application up-to-date.
+
+#what is turbo in rails 
+- Turbo is a new framework for building modern web applications that was recently introduced as part of Ruby on Rails 7. It is designed to simplify the development of fast, reactive, and interactive web applications by providing a set of tools and conventions for building front-end functionality.
+-Turbo is based on the principles of "HTML over the wire" and "server-driven UI," which means that it focuses on delivering HTML updates over a single connection instead of constantly requesting new HTML from the server. This can help to reduce the amount of network traffic and improve the performance of web applications, especially on slower connections or mobile devices.
+- Turbo includes a number of features for building reactive and interactive web applications, including:
+Turbo Streams - a mechanism for delivering HTML updates over a single connection, using server-sent events.
+Turbo Frames - a way to embed a remote page within a page, which can be used to implement client-side navigation without the need for a full page refresh.
+Turbo Drive - a JavaScript library that automatically intercepts links and form submissions on your website and fetches the content using Ajax, allowing for faster and more seamless page transitions.
+- overall, Turbo is a powerful and flexible framework that can help simplify the development of fast and reactive web applications in Ruby on Rails.
+- It converts all link clicks and form submissions into AJAX requests to speed up our application
+- It prevents the browser from making too many requests to load CSS and JavaScript files
+- The best part is that we didn't have to write any custom code. We get this benefit for free!
+
+#Reloading the page with data-turbo-track="reload"
+- on every new request, Turbo Drive compares the DOM elements with data-turbo-track="reload" in the <head> of the current HTML page and the <head> of the response. If there are differences, Turbo Drive will reload the whole page.
+
+#Turbo Frame
+- Turbo Frames are independent pieces of a web page that can be appended, prepended, replaced, or removed without a complete page refresh and writing a single line of JavaScript!
+- When clicking on a link within a Turbo Frame, Turbo expects a frame of the same id on the target page. It will then replace the Frame's content on the source page with the Frame's 
+  content on the target page.
+<%= turbo_frame_tag "first_turbo_frame" do %>
+<% end %>
+- A link can target a Turbo Frame it is not directly nested in, thanks to the data-turbo-frame data attribute. 
+- There is a special frame called "_top" that represents the whole page. It's not really a Turbo Frame, but it behaves almost like one

@@ -1,0 +1,59 @@
+#link for guides
+https://bitbucket.org/neetesh-simform/demo/src/main/lib/intern-training/rails.md
+#getting started
+https://guides.rubyonrails.org/getting_started.html
+
+#MVC -  model -  used to represent data,logic,query,validation  
+        view - html code for webpage
+        controller - serve the request made by user
+#migration is used for structure a database 
+
+#for api -rails create only api project beacause we dont need fronted we only need backend
+#Gems and bundler - gems are libraries that are allow any ruby on rail devloper to add functionalities without writing code 
+                    bundler provide consistent environment for ruby project by tracking and installing the exact gems and version that are needed
+                    link for gems - https://rubygems.org/  link for bundle - https://bundler.io/
+                    - we can add gems into gemfile with version
+                    - gemfile.lock has all the dependancy of that gems
+                    - bundle install will install new gems dependancy with version if specify
+#Gemset is set of gems for particuler project
+
+
+#for if have rail in ruby version 3.1.2 and if switch into another version than rail version is not there.
+
+
+
+#DRY - Don't Repeat Yourself - do not use same code again and again. put it some where and reuse it
+#Convention Over Configration - at the time creating constructing controller it will also create action page in view with same name folder page name is same as action name so that is how configration is done
+                                - model to table nameing convention
+                                - routes to controller's action
+                                - contoller action to corresponding view
+#Rails server and ROR use with (IDE)
+to create database we have define username,password,host inside database.yml then in terminal
+rails db:create - to create database
+rails db:migrate
+rails server - to run server
+rails server -p 5001 - to run server at perticular server
+rails console - it just like irb but for rails
+
+
+rails new blog                  #to create new web app
+rails new appname -d=postgresql #to create new web app with postgreSQL
+rails new --help                #all the command line option
+bin/rails server                #to run on server
+rails generate model User name:string phone:integer #create model with column
+rails generate controller Users index
+To install Ruby (with RVM): https://www.how2shout.com/linux/3-ways-to-install-ruby-on-ubuntu-22-04-lts-jammy/#5_Install_RVM-_Ruby_Version_Manager
+After successful ruby installation: use command  to install rails -> gem install rails
+To install PostgreSQL: https://www.digitalocean.com/community/tutorials/how-to-install-postgresql-on-ubuntu-22-04-quickstart
+
+
+#rails guides
+https://guides.rubyonrails.org/getting_started.html
+
+
+
+postgres
+psql
+sudo -u postgres psql
+inside - ALTER USER yash SUPERUSER;
+

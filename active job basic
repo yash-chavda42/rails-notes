@@ -1,0 +1,47 @@
+Active Job is a framework for declaring jobs and making them run on a variety of queueing backends.
+
+#to create job 
+bin/rails generate job guests_cleanup
+
+#give urgent priority
+bin/rails generate job guests_cleanup --queue urgent
+
+#this generated file inherits from ActiveJob::Base
+
+
+#Job Execution
+If no adapter is set, the job is immediately executed.
+Active Job has built-in adapters for multiple queueing backends (Sidekiq, Resque, Delayed Job and others).
+
+- Setting the Backend -     config.active_job.queue_adapter = :sidekiq add this line into application.rb
+
+#queues
+queue_as :low_priority - job is enqueue in low priority queue.
+config.active_job.queue_name_prefix = Rails.env - this line will add prefix based on differenet environment.
+queue_as - method in Active Job allows you to specify the name of the queue that a job should be enqueued on. By default, the queue name is based on the name of the job class, but you can override this by calling queue_as and passing the desired queue name as an argument.
+queue_as - The queue_as method allows you to specify the queue name for the job at runtime, based on the job arguments or other conditions.
+
+#callbacks
+before_enqueue
+around_enqueue
+after_enqueue
+before_perform
+around_perform
+after_perform
+
+#Internationalization
+I18n.locale = :eo - kind of translation
+
+#global id
+When you pass an Active Record object or any other Ruby object as an argument to a job, Active Job will automatically serialize the object into a format that can be transferred across process boundaries. This serialization process uses GlobalID to generate a unique identifier for the object, which can be used to retrieve the object later on.
+
+#exception
+Active Job provides a way to catch exceptions raised during the execution of the job:
+
+#sidekiq
+add gem for sidekiq
+bundle exec sidekiq - to run server and we also need redis server
+
+rails g sidekiq:worker HardWorker - create file for sidekiq job
+rails g sidekiq:job NewWorker - create file for sidekiq job
+CreateUserWorker.perform_async - to call job
