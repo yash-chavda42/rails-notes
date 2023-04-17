@@ -1,0 +1,84 @@
+#Creating Responses
+render - send response in same request
+redirect_to - send response in same request
+head
+
+#render
+- The actual rendering is done by nested classes of the module ActionView::Template::Handlers. 
+-  ActionController::Base#render method does the heavy lifting of rendering
+- render "products/show" - render in differnet controller
+- render template: "products/show" - template used in rails 2.2 version
+
+- differnent way to render
+render :edit
+render action: :edit
+render "edit"
+render action: "edit"
+render "books/edit"
+render template: "books/edit"
+
+#render with :inline -  if you're willing to use the :inline option to supply ERB as part of the method call.
+- render inline: "<% products.each do |p| %><p><%= p.name %></p><% end %>"
+- By default, inline rendering uses ERB. You can force it to use Builder instead with the :type option: - type: :builder - at the end
+
+#Rendering Text
+- render plain: "OK" - You can send plain text with plain option
+- By default, if you use the :plain option, the text is rendered without using the current layout. If you want Rails to put the text into the current layout, you need to add the layout: true option and use the .text.erb extension for the layout file.
+
+#Rendering HTML
+render html: helpers.tag.strong('Not Found') - his is useful when you're rendering a small snippet of HTML code.
+
+#Rendering JSON
+render json: @product
+
+#Rendering XML
+render xml: @product
+
+#Rendering Vanilla JavaScript
+render js: "alert('Hello Rails');"
+
+#Rendering raw body
+render body: "raw"
+
+#Rendering raw body
+render body: "raw"
+
+#render raw file 
+render file: "#{Rails.root}/public/404.html", layout: false
+- send_file is often a faster and better option if a layout isn't required.
+
+#Rendering objects
+render MyRenderable.new
+
+#Options for render
+:content_type - render template: "feed", content_type: "application/rss" - By default MIME content-type of text/html (or application/json if you use the :json option, or application/xml for the :xml option.).
+:layout - render 
+- layout: "special_layout" - to specify layout
+- render layout: false - for no layout
+:location - 
+- render xml: photo, location: photo_url(photo) - You can use the :location option to set the HTTP Location header
+:status - 
+- render status: 500 - in most cases, this is 200 OK but we can change it.
+200	:ok
+201	:created
+202	:accepted
+400	:bad_request
+401	:unauthorized
+402	:payment_required
+403	:forbidden
+404	:not_found
+422	:unprocessable_entity
+500	:internal_server_error
+:formats - :html by default
+- render formats: :xml
+- render formats: [:json, :xml]
+
+:variants -
+render variants: [:mobile, :desktop] - app/views/home/index.html+mobile.erb 
+
+
+
+
+
+
+

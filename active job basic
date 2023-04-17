@@ -45,3 +45,4 @@ bundle exec sidekiq - to run server and we also need redis server
 rails g sidekiq:worker HardWorker - create file for sidekiq job
 rails g sidekiq:job NewWorker - create file for sidekiq job
 CreateUserWorker.perform_async - to call job
+for scheduler we can use scheduler-cron gem and set schedule for job to execute 

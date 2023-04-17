@@ -1,0 +1,122 @@
+#Joining Tables
+Active Record provides two finder methods for specifying JOIN clauses on the resulting SQL: joins and left_outer_joins. While joins should be used for INNER JOIN or custom queries, left_outer_joins is used for queries using LEFT OUTER JOIN.
+Author.joins("INNER JOIN books ON books.author_id = authors.id AND books.out_of_print = FALSE")
+- Joining a Single Association
+Book.joins(:reviews)
+- Joining Multiple Associations
+Book.joins(:author, :reviews)
+- Joining Nested Associations (Single Level)
+Book.joins(reviews: :customer)
+- Joining Nested Associations (Multiple Level)
+Author.joins(books: [{ reviews: { customer: :orders } }, :supplier] )
+- left_outer_joins
+Customer.left_outer_joins(:reviews).distinct.select('customers.*, COUNT(reviews.*) AS reviews_count').group('customers.id')
+
+
+#Eager Loading Associations
+Eager loading is the mechanism for loading the associated records of the objects returned by Model.find using as few queries as possible.
+Solution to N + 1 queries problem
+The methods are:
+- includes
+With includes, Active Record ensures that all of the specified associations are loaded using the minimum possible number of queries.
+books = Book.limit(10)
+books.each do |book|
+  puts book.author.last_name
+end - here it is taking n+1 query if 10 author is there then 11 query so that is the problem.
+
+books = Book.includes(:author).limit(10) - here at the time loading book data we are also loading author data for all the book so it is done is 2 query
+The includes method is typically used when you need to load associated records and use them in the view, but you don't need to modify them.
+The includes method loads the associated records in a separate query, using a LEFT OUTER JOIN to fetch the associated records.
+
+- preload
+The preload method loads the associated records in a separate query, but it does not use a JOIN to fetch them. Instead, it uses multiple SELECT queries to fetch the associated records
+This can be useful when you need to load associated records that you will modify, as it allows you to modify them without triggering additional database queries. However, it can result in a larger number of database queries overall.
+
+- eager_load
+The eager_load method also loads the associated records using a LEFT OUTER JOIN, similar to includes. However, unlike includes, eager_load immediately executes the database query and loads all associated records. 
+This can be useful when you need to load associated records and immediately modify them, as it allows you to modify them without triggering additional database queries.
+
+#Eager Loading Multiple Associations
+Customer.includes(:orders, :reviews)
+
+#Nested Associations Hash
+Customer.includes(orders: {books: [:supplier, :author]}).find(1)
+This will find the customer with id 1 and eager load all of the associated orders for it, the books for all of the orders, and the author and supplier for each of the books.
+
+#Specifying Conditions on Eager Loaded Associations
+Author.includes(:books).where(books: { out_of_print: true })
+
+
+#Scopes, Passing in arguments, Using conditionals, Applying a default scope, Merging of scopes
+Scoping allows you to specify commonly-used queries which can be referenced as method calls on the association objects or models.
+scope :out_of_print, -> { where(out_of_print: true) } - simple scope
+scope :costs_more_than, ->(amount) { where("price > ?", amount) } - also pass argument
+
+- class method
+def self.costs_more_than(amount)
+    where("price > ?", amount)
+end
+
+differnce is if result of both is nil and we perform more opration then scope will give again nil and class method give error. 
+
+- Using conditionals
+scope :created_before, ->(time) { where("created_at < ?", time) if time.present? }
+- Applying a default scope
+default_scope { where(out_of_print: false) }
+def self.default_scope - class with self method
+The default_scope is also applied while creating/building a record when the scope arguments are given as a Hash. It is not applied while updating a record.
+- Merging of scopes
+Book.in_print.merge(Book.out_of_print)
+
+#Removing All Scoping
+Book.unscoped.all - using unscope we can do that.
+
+#Dynamic Finders
+Active Record provides a finder method - find_by_first_name, 
+
+#Enums
+An enum lets you define an Array of values for an attribute and refer to them by name. The actual value stored in the database is an integer that has been mapped to one of the values.
+enum :status, [:shipped, :being_packaged, :complete, :cancelled] - we can decalre enum
+Order.shipped - all order status with shipped.
+Order.not_shipped - with no shipped status.
+order.shipped? - true
+
+#Understanding Method Chaining: Retrieving filtered data from multiple tables, Retrieving specific data from multiple tables
+The Active Record pattern implements Method Chaining, which allow us to use multiple Active Record methods together in a simple and straightforward way.
+- Retrieving filtered data from multiple tables
+Customer
+  .select('customers.id, customers.last_name, reviews.body')
+  .joins(:reviews)
+  .where('reviews.created_at > ?', 1.week.ago)
+- Retrieving specific data from multiple tables
+Book
+  .select('books.id, books.title, authors.first_name')
+  .joins(:author)
+  .find_by(title: 'Abstraction and Specification in Program Development')
+
+#Finding by SQL
+If you'd like to use your own SQL to find records in a table you can use find_by_sql.
+
+#pluck
+it will return array of result
+Customer.ids - select id of customer
+
+
+#Existence of Objects
+If you simply want to check for the existence of the object there's a method called exists?.
+Customer.exists?(1)- The exists? method also takes multiple values, but the catch is that it will return true if any one of those records exists.
+Customer.exists? - The above returns false if the customers table is empty and true otherwise.
+
+
+#Calculations: Count, Average, Minimum, Maximum, Sum
+Customer.count
+Customer.where(first_name: 'Ryan').count
+Order.average("subtotal") - average of subtotal
+Order.maximum("subtotal")
+Order.minimum("subtotal")
+Order.sum("subtotal")
+
+
+#Running EXPLAIN and Interpreting EXPLAIN
+ you can use the ActiveRecord::Explain module to run EXPLAIN on your queries. The module provides an explain method that you can call on your queries to display the query execution plan.
+
