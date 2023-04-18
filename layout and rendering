@@ -109,15 +109,25 @@ Using the content_for Method - The content_for method allows you to insert conte
 <%= render "shared/menu" %> - inside shared folder view
 
 <%= render partial: "link_area", layout: "graybar" %> - provide layout to the partial
+
 <%= render partial: "form", locals: {zone: @zone} %> - also pass local variable
+
 <%= render partial: "customer", object: @new_customer %> - also pass object in partial
-<%= render partial: "product", collection: @products %> - using collection we can pass all products
+
+<%= render partial: "product", collection: @products %> - using collection we can pass all products -  collection option specifies the collection to loop through.
 <p>Product Name: <%= product.name %></p> - _product.html.erb - and print here
+<%= render partial: "product", collection: @products, layout: "special_layout" %> - we can also pass layout woth collection
 
+<%= render @customer %> - here it find _custromer.html.erb and render it
 
+<%= render [customer1, employee1, customer2, employee2] %> - render multiple views one by one
 
+<%= render(@products) || "There are no products available." %> - it return string if there is no product partial
 
+<%= render partial: "product", collection: @products, as: :item %>
 
+#spacer template 
+<%= render partial: @products, spacer_template: "product_ruler" %> - Rails will render the _product_ruler partial (with no data passed in to it) between each pair of _product partials.
 
 
 

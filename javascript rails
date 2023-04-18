@@ -37,3 +37,20 @@ Turbo Drive - a JavaScript library that automatically intercepts links and form 
 <% end %>
 - A link can target a Turbo Frame it is not directly nested in, thanks to the data-turbo-frame data attribute. 
 - There is a special frame called "_top" that represents the whole page. It's not really a Turbo Frame, but it behaves almost like one
+
+
+#turbo stream
+- Turbo Streams allow you to broadcast changes made by other users over WebSockets and update pieces of a page after a form submission without requiring a full page load
+
+#turbo_method - it is used to define http method in link_to
+
+#confirmations
+turbo_confirm: "Are you sure?" - inside link_to we can delare it and generate alert box for confirmations.
+
+
+
+
+
+
+
+

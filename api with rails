@@ -1,0 +1,128 @@
+#What is an API-only Application in rails?
+- Applicaition programming interaface
+- An API-only application in Rails is a type of application that is designed to solely provide an API for other applications to consume. It does not include any views or templates, and it is not intended to 	   	
+  serve HTML content directly to users.
+- It does not include any views or templates, and it is not intended to serve HTML content directly to users.
+- rails new my_api --api - to create application where applicationcontroller is inherit from ActionController::API
+- They allow developers to build scalable and flexible systems by separating the backend logic from the frontend user interfaces.
+
+
+#Why Use Rails for JSON APIs?
+- Let's take a look at some of the things that Rails provides out of the box that are still applicable to API applications.	
+- Handled at the middleware layer: 
+1)Reloading - support transparent reloading, This works even if your application gets big
+2)Development Mode - Rails applications come with smart defaults for development, making development pleasant without compromising production-time performance.
+3)Logging - Rails applications log every request
+4)Security - Rails detects and thwarts IP spoofing attacks
+5)Parameter Parsing - Want to specify your parameters as JSON instead of as a URL-encoded String? it is possible with rails.
+- handle at the action pack layer
+1)Resourceful Routing
+2)URL Generation
+3)Basic, Digest, and Token Authentication
+
+The Basic Configuration: Creating a new application, Changing an existing application
+- rails new my_api --api - create application for api creation.
+- three things is apply after above command
+1)ApplicationController inherit from ActionController::API
+2)Configure your application to start with a more limited set of middleware than normal.
+3)Configure the generators to skip generating views, helpers, and assets when you generate a new resource.
+
+- Changing an existing application
+config.api_only = true - in application.rb
+- To render debugging information preserving the response format, use the value :api.
+config.debug_exception_response_format = :api - inside development.rb
+
+
+Choosing Middleware: Using the Cache Middleware, Using Rack::Sendfile, Using ActionDispatch::Request, Using Session Middlewares, Other Middleware, Removing Middleware
+#Choosing middleware
+1)ActionDispatch::HostAuthorization
+2)Rack::Sendfile
+3)ActionDispatch::Static
+4)ActionDispatch::Executor
+5)ActiveSupport::Cache::Strategy::LocalCache::Middleware
+6)Rack::Runtime
+7)ActionDispatch::RequestId
+8)ActionDispatch::RemoteIp
+9)Rails::Rack::Logger
+10)ActionDispatch::ShowExceptions
+11)ActionDispatch::DebugExceptions
+12)ActionDispatch::ActionableExceptions
+13)ActionDispatch::Reloader
+14)ActionDispatch::Callbacks1
+15)ActiveRecord::Migration::CheckPending
+16)Rack::Head
+17)Rack::ConditionalGet
+18)Rack::ETag
+
+#cache middleware 
+- Cache middleware in Rails is responsible for caching responses from the application server and serving them directly to clients without having to re-execute the request or recompute the response. 
+- using cache middleware in your Rails application, you can significantly improve the performance and scalability of your application by reducing the load on your application server and minimizing the time required to generate responses for clients.
+
+#Using Rack::Sendfile
+- it sets the X-Sendfile header. Rack::Sendfile is responsible for actually sending the file.
+-  is a middleware in Rails that allows the web server to serve static files directly to the client, bypassing the Ruby application server. It works by sending a header to the web server that tells it to serve the requested file directly to the client.
+
+#Using ActionDispatch::Request
+- will take parameters from the client in the JSON format and make them available in your controller inside params.
+- To use this, your client will need to make a request with JSON-encoded parameters and specify the Content-Type as application/json.
+
+#Using Session Middlewares - for session management
+ActionDispatch::Session::CacheStore
+ActionDispatch::Session::CookieStore
+ActionDispatch::Session::MemCacheStore
+
+#other middleware
+Rack::MethodOverride
+ActionDispatch::Cookies
+ActionDispatch::Flash
+
+#to add middleware
+config.middleware.use Rack::MethodOverride
+
+#remove middleware
+config.middleware.delete ::Rack::Sendfile
+
+
+#Choosing Controller Module: Adding Other Modules
+ActionController::UrlFor
+ActionController::Redirecting
+ActionController::Renderers::All
+AbstractController::Callbacks:
+ActionController::ParamsWrapper
+
+#we can also add some other modles.
+ActionView::Layouts
+ActionController::Cookies
+ActionController::HttpAuthentication::Basic::ControllerMethods
+ActionController::HttpAuthentication::Digest::ControllerMethods
+ActionController::HttpAuthentication::Token::ControllerMethods
+
+Install the postman and check its usage of the postman. 
+in post man based on request we can get, post, patch,and put data.
+for create and update data provide raw data in json formate in body
+{       
+        "content": "hello",
+        "date_of_comment": "2023-04-10",
+        "article_id": 13
+}
+
+Learn about the environmental-based configurations for local/staging/production
+Create a demo application for API only and returns data into that. Create a seed file for dummy data.
+
+#Use pagination for paginated data
+gem 'kaminari' - for pagination add gem
+User.order(:name).page(7).per(50)
+User.order(:name).page(7).per(50).padding(3)
+http://localhost:3000/api/v1/articles?page=1&per_page=4 - this is how we can pass pagination parameter
+
+
+
+Note: Keep in mind to use RESTful API
+
+
+
+
+
+
+
+
