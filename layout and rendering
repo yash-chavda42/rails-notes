@@ -76,6 +76,49 @@ render MyRenderable.new
 :variants -
 render variants: [:mobile, :desktop] - app/views/home/index.html+mobile.erb 
 
+#layout
+layout "inventory" - Specifying Layouts for Controllers
+- we can also specify layout at runtime bu declaring method
+- Conditional Layouts -   layout "product", except: [:index, :rss]
+- layout false
+- <%= render @products || "empty_list" %> - if there is no product then it will go to _empty_list.html.erb
+#redirect_to 
+- Another way to handle returning responses to an HTTP request
+- redirect_back(fallback_location: root_path) -  return the user to the page they just came from, fallback_location: in case of browser is not store HTTP_REFERER.
+
+Structuring Layouts
+#Asset Tag Helpers
+- auto_discovery_link_tag -  feed readers can use to detect the presence of RSS, Atom, or JSON feeds.
+- javascript_include_tag - it will used as script tag, delclare js file.
+- stylesheet_link_tag - link to css file.
+- image_tag - link image
+- video_tag - link video
+- audio_tag - link audio file
+- option for video and audio 
+autoplay: true, starts playing the audio on page load
+controls: true, provides browser supplied controls for the user to interact with the audio.
+autobuffer: true, the audio will pre load the file for the user on page load.
+
+#Understanding yield
+<%= yield :head %> - we can define yield for head 
+<%= yield %> - we can define yield for body
+Using the content_for Method - The content_for method allows you to insert content into a named yield block in your layout
+
+#partial - are another device for breaking the rendering process into more manageable chunks
+<%= render "menu" %> - render partial as part of view
+<%= render "shared/menu" %> - inside shared folder view
+
+<%= render partial: "link_area", layout: "graybar" %> - provide layout to the partial
+<%= render partial: "form", locals: {zone: @zone} %> - also pass local variable
+<%= render partial: "customer", object: @new_customer %> - also pass object in partial
+<%= render partial: "product", collection: @products %> - using collection we can pass all products
+<p>Product Name: <%= product.name %></p> - _product.html.erb - and print here
+
+
+
+
+
+
 
 
 
