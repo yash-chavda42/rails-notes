@@ -54,7 +54,7 @@ bin/rails generate model Message images:attachments - generate model here for me
 user.avatar.purge - Synchronously destroy the avatar and actual resource files
 user.avatar.purge_later - Destroy the associated models and actual resource files async
 
-#Serving Files
+#Serving Files - doubt
 Active Storage supports two ways to serve files: redirecting and proxying.
 - redirect mode
 - To generate a permanent URL for a blob, you can pass the blob to the url_for view helper. 
@@ -64,7 +64,56 @@ Active Storage supports two ways to serve files: redirecting and proxying.
 - rails_blob_path(user.avatar, disposition: "attachment" - o create a download link, use the rails_blob_{path|url} helper.
 
 - proxy mode
+- You can configure Active Storage to use proxying by default:	
+Rails.application.config.active_storage.resolve_model_to_route = :rails_storage_proxy
+- <%= image_tag rails_storage_proxy_path(@user.avatar) %> - url helper
 
+#Authenticated Controllers - doubt
+
+#Downloading Files
+binary = user.avatar.download
+
+#Analyzing Files
+- Active Storage analyzes files once they've been uploaded by queuing a job in Active Job.
+- You can check whether a blob has been analyzed by calling analyzed?
+- Image analysis provides width and height attributes.
+- Image analysis provides width and height attributes.
+- Video analysis provides these, as well as duration, angle, display_aspect_ratio.
+- Audio analysis provides duration and bit_rate attributes.
+
+#Displaying Images, Videos, and PDFs
+-  <% if file.representable? %> if this method give true then it is possible to reprsent
+- <%= image_tag file.representation(resize_to_limit: [100, 100]) %> else we have to diplay using link to
+
+#Lazy vs Immediate Loading
+- By default, Active Storage will process representations lazily.
+- image_tag file.representation(resize_to_limit: [100, 100]) - lazy loading
+- image_tag file.representation(resize_to_limit: [100, 100]).processed.url - immediate loading 
+- Lazy loading means that the attachment is not loaded from the storage service until it is actually needed
+- Immediate loading, on the other hand, means that the attachment is loaded from the storage service as soon as the associated model is loaded.
+
+
+#transforming images in rails
+- Transforming images allows you to display the image at your choice of dimensions. 
+- <%= image_tag user.avatar.variant(resize_to_limit: [100, 100]) %>
+- Active Storage can use either Vips or MiniMagick as the variant processor.
+ 
+#Previewing Files
+- Some non-image files can be previewed
+- <%= image_tag message.video.preview(resize_to_limit: [100, 100]) %>
+ 
+#Direct Uploads
+- Active Storage, with its included JavaScript library, supports uploading directly from the client to the cloud.
+- Include activestorage.js in your application's JavaScript bundle.
+- <%= form.file_field :attachments, multiple: true, direct_upload: true %> in form add direct_upload: true
+
+
+#Cross-Origin Resource Sharing (CORS) configuration
+To make direct uploads to a third-party service work, you’ll need to configure the service to allow cross-origin requests from your app. Consult the CORS documentation for your service:
+
+#Testing
+#Implementing Support for Other Cloud Services
+#Purging Unattached Uploads
 
 
 

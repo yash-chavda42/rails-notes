@@ -1,0 +1,92 @@
+Action Mailer allows you to send emails from your application using mailer classes and views.
+- Mailers are similar to controllers
+- inherit from ActionMailer::Base
+- live in app/mailers
+- they views are app/views, can use layout and partial, params and hashes, instance variable are accesable in view.
+
+#Create the Mailer
+- bin/rails generate mailer User - it will generate usermailer ehich inherit from applicationmailer and it inherit from  actionmailer:base 	
+- default from: "from@example.com" -
+- layout 'mailer'
+def welcome_email
+  @user = params[:user]
+  @url  = 'http://example.com/login'
+  mail(to: @user.email, subject: 'Welcome to My Awesome Site')
+end
+
+- we can define this kind of action and define configuration for mailer.
+- this method has welcome_email.html.erb or welcome_email.text.erb view for that email  content	
+
+#to call this action
+- UserMailer.with(user: @user).welcome_email.deliver_later - pass user in params.
+- UserMailer.welcome_email(@user).deliver_later - pass user as argument.
+- deliver_later - work async
+- deliver_now - work sync
+
+#Action Mailer Methods
+header - You can pass a hash of header field names and value pairs 
+attachments - allow file attachment 
+mail - create actual mail itself	
+
+#Adding Attachments - using attechment we can add file.
+attachments.inline['image.jpg'] = File.read('/path/to/image.jpg') inside action and in view attachments['image.jpg'].url for attachment.
+
+#Sending Email To Multiple Recipients - default to: -> { Admin.pluck(:email) } - get all email in array formate. 
+- :cc and :bcc is also used for Cc: and Bcc: 
+ 
+#Sending Email With Name - to: email_address_with_name(@user.email, @user.name) - we can also so for from user.
+
+#to change mailer view
+mail(to: @user.email,
+         subject: 'Welcome to My Awesome Site',
+         template_path: 'notifications',
+         template_name: 'another')
+here it will find inside view/notifications and find name another
+render 'another_template' -  another_template.html.erb
+
+#If you would like to render a template located outside of the default app/views/mailer_name/ directory
+prepend_view_path "custom/path/to/mailer/view"
+
+#Caching mailer view
+- we're using the cache method to cache the rendered view for the email.
+- By caching mailer views, you can improve the performance of your application and reduce the load on your servers.
+- config.action_mailer.perform_caching = true
+ 
+#action mailer layout
+layout 'awesome' in mailer
+format.html { render layout: 'my_layout' } in side action  
+ 
+#it will give overview that how over email will look
+- we implement same action inside usermailerpreview which inside test/mailer/preview folder 
+- http://localhost:3000/rails/mailers. - all preview are availble here.
+
+#Generating URLs with url_for
+<%= url_for(host: 'example.com',
+            controller: 'welcome',
+            action: 'greeting') %>
+
+# Adding images in Action Mailer Views - using image tag we can add
+
+#Sending Emails with Dynamic Delivery Options - we can sent delivery_options using smtp configuration.
+	
+#Sending Emails without Template Rendering - using :body we can send only string and we have to send :content_type 
+
+#Action Mailer Callbacks
+- before_action - before action set variable
+- after_action -after email redered
+- around_action - both time
+	  
+#Action Mailer Configuration
+
+config.action_mailer.smtp_settings = {
+  address:              'smtp.gmail.com',
+  port:                 587,
+  domain:               'example.com',
+  user_name:            '<username>',
+  password:             '<password>',
+  authentication:       'plain',
+  enable_starttls_auto: true,
+  open_timeout:         5,
+  read_timeout:         5 }
+
+ 

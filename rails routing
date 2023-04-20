@@ -1,0 +1,189 @@
+The Rails router recognizes URLs and dispatches them to a controller's action.
+# 7 default route for resource rouitng
+index, show, new, edit, create, update, and destroy
+
+- resources :photos 
+HTTP Verb	Path			Controller#Action	Used for					helper_path
+GET		/photos			photos#index		display a list of all photos			photos_path
+GET		/photos/new		photos#new		return an HTML form for creating a new photo	new_photo_path
+POST		/photos			photos#create		create a new photo				photos_path - post
+GET		/photos/:id		photos#show		display a specific photo			photo_path(:id)
+GET		/photos/:id/edit	photos#edit		return an HTML form for editing a photo		edit_photo_path(:id)
+PATCH/PUT	/photos/:id		photos#update		update a specific photo				photo_path(:id) - patch/put
+DELETE		/photos/:id		photos#destroy		delete a specific photo				photo_path(:id) - destory
+
+#Defining Multiple Resources at the Same Time
+resources :photos, :books, :videos
+get 'profile', action: :show, controller: 'users' - we can specify controller
+
+#for singuler controller 
+resource :geocoder - here we are definding singuler controller means in routes
+resolve('Geocoder') { [:geocoder] }
+#here it will create six different router without any id because it is for singuler object. and index is not there.
+GET		/geocoder/new	geocoders#new		return an HTML form for creating the geocoder
+POST		/geocoder	geocoders#create	create the new geocoder
+GET		/geocoder	geocoders#show		display the one and only geocoder resource
+GET		/geocoder/edit	geocoders#edit		return an HTML form for editing the geocoder
+PATCH/PUT	/geocoder	geocoders#update	update the one and only geocoder resource
+DELETE		/geocoder	geocoders#destroy	delete the geocoder resource
+
+#Controller Namespaces and Routing - it will create everything under admin
+namespace :admin do
+  resources :articles, :comments
+end
+in controller - under admin module and admin folder
+in path - after - /admin/
+in helper path - admin_articles_path
+
+- if we only need aricles under admin module but not need admin prefix in url and not in helper path
+scope module: 'admin' do
+  resources :articles, :comments
+end
+or resources :articles, module: 'admin'
+
+- if we only need in url like /admin/article
+scope '/admin' do
+  resources :articles, :comments
+end
+or resources :articles, path: '/admin/articles'
+
+#nested resources 
+resources :magazines do
+  resources :ads
+end
+- here magazones  has_many :ads and ads  belongs_to :magazine
+- in ads path it will pass magazine id. so that opration done for that magazine ads.
+- You can nest resources within other nested resources but Resources should never be nested more than 1 level deep.
+
+- shallow nesting - One way to avoid deep nesting - on every action we do not need to send associated id so we can avoid that in edit, update, show, destroy.
+resources :articles do
+  resources :comments, shallow: true
+end
+
+resources :articles, shallow: true do
+  resources :comments
+  resources :quotes
+  resources :drafts
+end
+
+- it will avoid deap nesting by provideing sekret prefix in path    
+scope shallow_path: "sekret" do
+  resources :articles do
+    resources :comments, shallow: true
+  end
+end
+
+- it will avoid deap nesting by provideing sekret prefix in  helper path    
+scope shallow_prefix: "sekret" do
+  resources :articles do
+    resources :comments, shallow: true
+  end
+end
+
+#routing concerns	
+Routing concerns allow you to declare common routes that can be reused inside other resources and routes. 
+concern :commentable do  
+  resources :comments
+end - we can define concern router which we can use in other resource router
+
+resources :messages, concerns: :commentable - it is equal to above nested routing example
+
+#Creating Paths and URLs from Objects
+<%= link_to 'Ad details', magazine_ad_path(@magazine, @ad) %> == <%= link_to 'Ad details', url_for([@magazine, @ad]) %> == <%= link_to 'Ad details', [@magazine, @ad] %> - to add
+<%= link_to 'Magazine details', @magazine %> - 
+<%= link_to 'Edit Ad', [:edit, @magazine, @ad] %>
+
+#member and collection
+- member - is used to declare indivdual action. it will pass id
+resources :photos do
+  member do
+    get 'preview'
+  end
+end
+or get 'preview', on: :member
+
+- collection -  here it will not pass id. we can use this for searching record
+resources :photos do
+  get 'search', on: :collection
+end
+
+#Adding Routes for Additional New Actions
+resources :comments do
+  get 'preview', on: :new
+end
+
+#Bound Parameters
+get 'photos(/:id)', to: 'photos#display'
+
+#Dynamic Segments
+get 'photos/:id/:user_id', to: 'photos#show'
+
+#Static Segments
+get 'photos/:id/with_user/:user_id', to: 'photos#show'
+
+#The Query String
+get 'photos/:id', to: 'photos#show'
+
+#Defining Defaults
+get 'photos/:id', to: 'photos#show', defaults: { format: 'jpg' } - params[:format] = "jpg"
+
+defaults format: :json do - also do it with default block
+  resources :photos
+end
+
+#Naming Routes
+get 'exit', to: 'sessions#destroy', as: :logout - by define helper path by giving as - logout_path
+
+#HTTP Verb Constraints
+-  You can use the match method with the :via option to match multiple verbs at once:
+match 'photos', to: 'photos#show', via: [:get, :post] - get and post both request are work for this action
+match 'photos', to: 'photos#show', via: :all - for all request
+- Routing both GET and POST requests to a single action has security implications. In general, you should avoid routing all verbs to an action unless you have a good reason to.
+- GET in Rails won't check for CSRF token. You should never write to the database from GET requests
+
+
+#Segment Constraints
+get 'photos/:id', to: 'photos#show', constraints: { id: /[A-Z]\d{5}/ } - to match id with contraint
+
+#Advanced Constraints
+- you can provide an object that responds to matches? that Rails should use. 
+- inside Rails.application.routes.draw do block
+
+get 'photos/*other', to: 'photos#unknown' - here in place of *other we can add any thing
+get 'books/*section/:title', to: 'books#show' - here in place of *section we can add any thing
+get '*a/foo/*b', to: 'test#index' -  here foo is fix 
+format: false option disables the recognition of request formats such as .html or .json in the URL
+
+get '/stories', to: redirect('/articles') - redirect path also
+get '/stories/:name', to: redirect('/articles/%{name}', status: 302) - also pass status 
+
+root to: 'pages#main'
+namespace :admin do - in admin prefix we can also define localhost
+  root to: "admin#index"
+end
+
+#Using resolve - The resolve method allows customizing polymorphic mapping of models. For example:
+This will generate the singular URL /basket instead of the usual /baskets/:id.
+
+#Customizing Resourceful Routes
+resources :photos, controller: 'images' - if controller is different but helper is base on photo
+resources :user_permissions, controller: 'admin/user_permissions'
+
+#Overriding the new and edit Segments
+resources :photos, path_names: { new: 'make', edit: 'change' }
+or
+scope path_names: { new: 'make' } do
+  # rest of your routes
+end
+
+
+#Restricting the Routes Created
+resources :photos, only: [:index, :show]
+resources :photos, except: :destroy
+
+#Translated Paths
+scope(path_names: { new: 'neu', edit: 'bearbeiten' }) do
+  resources :categories, path: 'kategorien'
+end
+
+as: option is override helperpath
