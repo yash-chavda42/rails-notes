@@ -1,6 +1,6 @@
 #Creating Responses
 render - send response in same request
-redirect_to - send response in same request
+redirect_to - send response in new request
 head
 
 #render
@@ -116,7 +116,7 @@ Using the content_for Method - The content_for method allows you to insert conte
 
 <%= render partial: "product", collection: @products %> - using collection we can pass all products -  collection option specifies the collection to loop through.
 <p>Product Name: <%= product.name %></p> - _product.html.erb - and print here
-<%= render partial: "product", collection: @products, layout: "special_layout" %> - we can also pass layout woth collection
+<%= render partial: "product", collection: @products, layout: "special_layout" %> - we can also pass layout with collection
 
 <%= render @customer %> - here it find _custromer.html.erb and render it
 

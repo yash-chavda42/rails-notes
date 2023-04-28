@@ -14,8 +14,17 @@ If no adapter is set, the job is immediately executed.
 Active Job has built-in adapters for multiple queueing backends (Sidekiq, Resque, Delayed Job and others).
 
 - Setting the Backend -     config.active_job.queue_adapter = :sidekiq add this line into application.rb
+Sidekiq
+Resque
+Sneakers
+Sucker Punch
+Queue Classic
+Delayed Job
+Que
+Good Job
 
-#queues
+
+#queues -
 queue_as :low_priority - job is enqueue in low priority queue.
 config.active_job.queue_name_prefix = Rails.env - this line will add prefix based on differenet environment.
 queue_as - method in Active Job allows you to specify the name of the queue that a job should be enqueued on. By default, the queue name is based on the name of the job class, but you can override this by calling queue_as and passing the desired queue name as an argument.
@@ -37,7 +46,10 @@ When you pass an Active Record object or any other Ruby object as an argument to
 
 #exception
 Active Job provides a way to catch exceptions raised during the execution of the job:
-
+rescue_from(ActiveRecord::RecordNotFound) do |exception|
+    # Do something with the exception
+  end
+  
 #sidekiq
 add gem for sidekiq
 bundle exec sidekiq - to run server and we also need redis server

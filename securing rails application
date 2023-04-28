@@ -1,0 +1,16 @@
+#Session hijacking - type of attack where an attacker takes control of a user's active session on a website or application
+- Packet sniffing - An attacker can use a packet sniffer tool to intercept and monitor network traffic between the user's device and the server. If the traffic is not encrypted, the attacker can view the session ID in plain text and use it to hijack the user's session.
+
+- Cross-Site Scripting - In an XSS attack, an attacker injects malicious code into a vulnerable website or application. When a user visits the site or application, the injected code executes in their browser, allowing the attacker to steal the user's session ID.
+
+- Session fixation - In a session fixation attack, the attacker sets a known session ID for the user before they log in to the site or application. When the user logs in, their session is already hijacked by the attacker.
+
+- Session prediction - Some web applications use predictable session IDs that can be guessed by an attacker. For example, if the session ID is based on the current timestamp, an attacker could use brute force techniques to guess valid session IDs.
+
+#config.force_ssl = true - in production.rb file - Force all requests to use HTTPS
+- encrypts all data that is transmitted between the client and the server, making it more difficult for attackers to intercept and read sensitive information like passwords, credit card numbers, or other personal data.
+- you can potentially improve your website's search engine rankings and attract more visitors.
+
+
+#in rails session store in encrypted in cookies storage so to encrpt session id atteker need secret key which is stored in secrets.yml file  
+here secret key is known as secret_key_base which is 

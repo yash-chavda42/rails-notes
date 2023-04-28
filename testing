@@ -19,7 +19,14 @@ models/
 - The integration directory is meant to hold tests for interactions between controllers.
 - test class are inherit from ActiveSupport::TestCase and superclass is Minitest::Test
 
-- assert true - An assertion is a line of code that evaluates an object (or expression) for expected results.
+#assert true - An assertion is a line of code that evaluates an object (or expression) for expected results. For example, an assertion can check:
+- does this value = that value?
+- is this object nil?
+- does this line of code throw an exception?
+- is the user's password greater than 5 characters?
+- there is many kind of assertion is available
+- They are the ones that actually perform the checks to ensure that things are going as planned.
+- refere the list of assertion from docs
 
 #Brief Note About Test Cases
 ActiveSupport::TestCase
@@ -29,15 +36,18 @@ ActiveJob::TestCase
 ActionDispatch::IntegrationTest
 ActionDispatch::SystemTestCase
 Rails::Generators::TestCase
+- Each of these classes include Minitest::Assertions, allowing us to use all of the basic assertions in our tests.
 
 #test runner
 bin/rails test - this run all test form project.
 bin/rails test test/models/article_test.rb - we can define particuler file for testing.
 bin/rails test test/models/article_test.rb -n test_the_truth - we can also run particuler test.
 bin/rails test test/controllers - run test from specific directory
+bin/rails test -h - Check the documentation of the test runner
 
+	
 #Parallel Testing
--  Parallel Testing refers to the practice of running tests in parallel, which means running multiple test suites concurrently on different CPU cores.
+- Parallel Testing refers to the practice of running tests in parallel, which means running multiple test suites concurrently on different CPU cores.
 - Running tests in parallel reduces the time it takes your entire test suite to run.
 - Parallel Testing with Processes
   - The number of workers passed is the number of times the process will be forked.
@@ -51,18 +61,44 @@ bin/rails test test/controllers - run test from specific directory
 - Threshold to parallelize tests
   - This threshold is typically determined by considering the overhead of parallelization, such as the time required to spin up and manage multiple processes or threads, versus the potential speedup gained by executing tests in parallel.
   
+
+#fixtures 
+- Fixtures allow you to populate your testing database with predefined data before your tests run.
+users(:david) - in user.yml we are accessing date from name :david
+users(:david, :steve) - return an array containing the fixtures david and steve
+		
 #The Test Database
 - if there were modifications to existing migrations, the test database needs to be rebuilt. This can be done by executing bin/rails db:test:prepare.
 
+
 #Model Testing
 rails generate test_unit:model article title:string body:text
-under model we can check for all column validation.
+- this kind of test we are checking in model testing
+Validations: ensuring that required fields are present, and that data meets any additional constraints or formatting requirements.
+Associations: ensuring that relationships between models are properly set up, and that creating or deleting records in one model updates the associated records in other models.
+Scopes: ensuring that named scopes are properly defined and return the expected records.
+Callbacks: ensuring that model callbacks (such as before_save or after_create) are properly triggered and perform the expected actions.
+Business logic: testing any custom methods or calculations defined in the model that aren't covered by the above categories.
+
+#Screenshot Helper - used to take screenshot of our test. This can be helpful for viewing the browser at the point a test failed.
+two method - take_screenshot, take_failed_screenshot. 
+	
 
 #System Testing
+- Functional Testing: This type of testing is focused on verifying that the system or application meets the functional requirements and specifications. Test cases are designed to cover all functional areas of 	the system, including user interactions, data processing, and system integration.
+
+- Non-functional Testing: This type of testing focuses on the non-functional aspects of the system, such as performance, security, usability, and reliability. Examples of non-functional testing include load testing, security testing, accessibility testing, and compatibility testing.
+
+- User Acceptance Testing (UAT): This type of testing is typically conducted by end-users to verify that the system or application meets their requirements and is ready for deployment. UAT is often the final step in the testing process before the system is released to production.
+
+
 bin/rails generate system_test articles - generate file for this
+- verifies the behavior of a complete and integrated system or application.
+- It tests the system as a whole.
+- tests your application as if a real user were using it
 
 it checking working side of user like for all the functionality
- visit articles_path
+  visit articles_path
 
   click_on "New Article"
 
@@ -73,11 +109,21 @@ it checking working side of user like for all the functionality
 
   assert_text "Creating an Article"
   
-    
+#Changing the default settings
+- setting are in application_system_test_case.rb so can change there 
+- we can chnage browser setting from there.
+
 #Integration Testing
 - rails generate integration_test blog_flow - generate file
-- Integration tests are used to test how various parts of our application interact.
-- They are generally used to test important workflows within our application.
+- Integration testing in Ruby on Rails involves testing the interactions between different parts of your application, including the user interface, controllers, models, and other components. 
+
+- User Flows: This type of testing involves simulating user interactions with the application, such as filling out a form, submitting a request, and viewing the response. 
+
+- Controller Testing: This type of testing focuses on testing the controllers that handle requests and responses in your application. It ensures that the controllers properly handle different input data and respond with the expected output.
+
+- Model Testing: This type of testing involves testing the models that interact with the database and perform business logic. It ensures that the models properly handle data validation, associations, and other operations. 
+- For dealing with the integration test runner, see ActionDispatch::Integration::Runner
+- When performing requests, we will have ActionDispatch::Integration::RequestHelpers available for our use.
 
 test "can see the welcome page" do
   get "/"
