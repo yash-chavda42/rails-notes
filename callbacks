@@ -1,0 +1,110 @@
+#callback - callbacks are the method which is call duirng object lifecycle.
+created, updated, destroy.
+
+#callabck in same order in which they called
+before_validation
+after_validation
+before_save
+around_save 
+before_create
+around_create
+after_create
+after_save
+after_commit/after_rollback
+
+#for updates - above instead of create use update
+before_update
+around_update
+after_update
+
+#in destroy
+before_destroy
+around_destroy
+after_destroy
+after_commit/after_rollback
+
+#register callbacks
+before_validation :check_date? - call check_date? method before validation
+- if code is small in  method
+before_validation do
+	self.name = login.capitalize if name.blank?
+end
+
+#callback for certain life cycle event
+before_validation :check_date, on: :create - it will call only when create data
+or on: [:create, :update]
+
+#after_initialize 
+- will get called when new object of class is initialized 
+- loaded form database or with new method if intialize
+
+#after_find
+- will get called when we have finding data
+- load from database
+
+after_initialze do |user|
+	p "object initialze"
+end 
+
+after_find do |user|
+	p "object finded"
+end
+- if both callback are called then after_find will execute before after_initialize.
+
+#after_touch
+- when any object get touch
+- it is also work on associated data
+belongs_to :company, touch: true
+
+#method which are used to trigger callbacks
+- create, create!
+- destroy, destroy!, destroy_all, destroy_by, save, save!, touch, update, update!	
+- valid?
+
+#method which are trigger after_find
+- all
+- first/last
+- find, find_by
+
+#skipping callbacks
+- decrement,increment
+- delete, delete_all, delete_by
+- insert, insert!, insert_all!, insert_all
+- update_all, update_column, update_columns
+- upsert, upsert_all
+
+#halting execution
+- as we starting registering callbacks. they will be queue for execution.
+- this queue will be include model vlaidation, callbacksand database operatation.
+- if any callback raised error then whole chain is stop from being excuting.
+throw :abort - to intentionally stop the chain
+
+#relational callbacks - throuw association relation
+class User 
+	has_many :articles, dependent: :destroy
+end
+class Atricle
+	belongs_to :user
+	after_destroy :delete_user_article
+	def delete_user_article
+		p "delete article"
+	end
+end
+- if i delete user theen destroy callback will get called here in assocaited model.
+
+#conditional callback
+before_save :check_user, if: :pan_card?
+or if: [:first, :second]
+
+#calback classes
+- sometime callbacks which are usefull in other model so we can make callback classes and resuse it
+after_destroy PicterClass
+
+#transaction callbacks
+- this callbacks are called after completeion of database transaction.
+- they are similer to after_save but they won't called until database changes has been commited or rollback
+#after_commit - it get called when transecton done successfully else rollback called
+after_create_commit
+after_update_commit
+after_deatroy_commit
+

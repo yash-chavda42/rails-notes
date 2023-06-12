@@ -1,0 +1,238 @@
+rails db:test:prepare
+
+controller
+
+{ user: {name: "yash", age:21 } }
+params.require(:user).permit(:name, :age)
+
+session[:user_id] = user.id
+session.delete(:user_id)
+
+config.filter_paramters << :email << password
+config.session_store :cookie_store, expiry_after:30.minutes
+begin
+ user = User.find(1)
+rescue ActiveRecord::RecordNotFound => e
+ puts "record not found"
+end
+
+begin
+	user = User.find(1)
+rescue ActiveRecord::RecordNotFound => e
+	puts "record is not found"
+end
+
+form_with model:@user, url: path, mehtod: :post do |form|
+ fields_for :contact, @user.contects do |user_conetct|
+ user_contect.text_field :phone_number	
+ form.collection_select :city_id, City.order(:name), :id, :name
+ form.text_field
+ form.hidden_field
+ form.text_area
+ form.email_field
+ form.password_field	
+ form.date_field
+ form.color_field
+ form.url_field
+ form.time_field
+ form.datetime_locale_field
+ form.range_field
+ form.number_field
+end 
+
+accept_nested_attributes_for :addresses
+
+form.field_for :addresses, do |user_address|
+ 
+end
+in controller
+@user= User.new
+2.times { @user.addresses.build }
+ addresses_atributes:[:id, :kind]
+ 
+ 
+ 
+User.find_in_batch do |user|
+ 
+end
+
+User.where("description LIKE ?","%#{params[:title]}%")
+
+find_or_create_by
+find_or_initislize_by
+
+has_many :pictures, as: :imageable
+
+belongs_to :imageable, polymorphic: true 
+Class Employee < ApplicationRecord
+ has_many :trainees, class_name: 'Employee', foreign_key: 'manager_id'
+ belongs_to :manager, class_name: 'Employee', optional: true
+end
+
+rails g model Vehicle type:string color:string
+rails g model Car --parent=Vehicle 
+Class Car < Vehicle
+end
+
+resources :photos, path_name: {new: 'make', edit: 'change'}
+
+validates :number, numericality: true
+inclusion: { in: %w(asd ad frr), message: "%{value} is not correct"  }
+
+person.errors.where(:name).first.full_message
+
+person.errors[:name]
+
+attechment.inline
+
+
+#query interface
+Author.joins(:books)	
+Author.joins("INNER JOIN books on books.author_id = authors.id")
+
+#multiple association
+Book.joins(:author, :reviews)
+select book.* form books
+INNER JOIN authors ON authors.id = books.author_id
+INNER JOIN reviews on reviews.book_id = books.id
+
+Book.joins(reviews: :customer)
+
+select books.* from books 
+inner join reviews on reviews.book_id = books.id
+inner join customers on customer.id = book.customer_id 
+
+Author.joins(books: [{ reviews: { customer: :orders } }, :supplier] )
+
+select authors.* from authors 
+inner join books on book.author_id = author.id
+inner join 
+
+
+I18n.available_locales = [:en, :de]
+I18n.default_locales  = :de
+activerecord.errors.models.user.attributes.
+
+
+Class CreateProducts < ActiveRecord::Migration[7.0]
+	def change
+		create_table :products do |t|
+			t.string :name
+			t.integer :age
+			t.timestamps
+		end
+	end
+end
+
+
+def change
+	change_table :products do |t|
+		t.change :price, :string
+	end
+end
+
+rails g migration AddNameToUsers name:string
+
+def change
+	add_column :users, :name, :string
+	add_index :users, :name		
+end
+
+rails g migration RemoveNameFromUsers name:string
+
+def change
+	remove_column :users, :name, :string
+end
+
+rails g migration AddUserRefToProducts user:references
+
+add_reference :products, :user, foreign_key: true
+
+CreateJoinTableUserProduct
+
+create_join_table :users :products do |t|
+	t.index [:user_id, product_id]
+end
+
+change_column :users, :name, :string
+
+
+add_reference :products, :user, index: false
+add_foreign_key :products, :users
+
+validates :name, presence: true
+.valid? 
+
+
+validates :term, acceptance: true
+
+validates :birth_date, comparison: { greater_than: :Today_date}
+
+validate :name, exclusion: { in: %w(yash ogg ok), message: "%(value) is reserved." } 
+
+validates :size, inclusion: { in: %w(n n n), message: "%(vlaue) is not allowed"} 
+
+validates :number, format: { with: , message: "not matched	"}
+
+validates :name, uniqueness: {scope: :year, message: "once in year"}
+
+Book.where("title LIKE ?","%" + params[:name] + "%")
+#{params[title]}
+
+Author.joins(:books).where(book: {published: true})
+
+Order.group(:status).count
+Order.select(created_at,sum(total) as total).group("created_at").having("sum(total) > ?", 200)
+
+c=Customer.readonly.first
+c.name = "yash"
+c.save 
+
+
+Author.join("innner join books on books.author_id == author.id
+
+scope :out_of_print, -> {where(out_of_print:true) }
+
+scope :out_of_print, ->(condition) { where(out_of_print: condition) }
+
+Customer.exists?(id: [1,2,3]) 
+
+rails g job GuestCleanup --queue urgent
+
+
+def change
+	create_table :employees do |t|
+	t.references :manager, foreign_key: { to_table: :employees}
+end
+
+form.field_for :addresses do |address_for_user|
+	
+end
+
+accept_nested_attributes_for :addresses, allow_destroy: true
+
+addresses_attributes: [:id, kind, street]
+
+rails g model --no-test-framework
+
+rails new app --skip-test
+
+
+
+
+file.reprentable?
+
+namespace :admin do 
+	
+end
+
+Book.where("title LIKE ?", params[:name]+"%")
+Book.where("title LIKE ?", Book.sanitize_sql_like(params[:title])+"%")
+
+Book.order(order: :desc)
+
+skip_authenticity_token: true
+
+
+
+

@@ -48,7 +48,9 @@ Turbo Drive - a JavaScript library that automatically intercepts links and form 
 turbo_confirm: "Are you sure?" - inside link_to we can delare it and generate alert box for confirmations.
 
 
-
+<%= turbo_frame_rag "first_id" %>
+<%end %>
+data: { tubro_frame: "second_frame" }
 
 
 

@@ -1,0 +1,205 @@
+#signup/signin
+- email, first_name, last_name, password
+- or google verification
+
+#main page(root page)
+- signin/signup/logout/profile option
+- search bar for places.
+- filter
+- category of placese.
+- list of places.
+- option for add your places/list of your places.
+
+#make your place to live
+- show step of how to get start.
+- which kind of place yours?
+- what guest will get for living.
+- fill address.
+- share some basic details.
+- additional facility that you are providing.
+- add photos of place.
+- give title of your house
+- describe the environment
+- description
+- set price
+- and submit details
+- verify id (upload photos)
+- set some rule
+
+#for book places
+- details of places diplayed
+- check availablity in calendar
+- resverd in calendar and pay using stripe 
+- before pay verify  
+
+#Booking	
+details of payment and place where user had did booking
+
+#super_user_page
+- it verify all the places and details then approve place for othere user booking
+- moniter all the acitivity(total number of user, from who are make there place for live)
+
+admin user
+
+user
+
+both have image
+
+
+verify
+DL number
+DOB
+user_id
+verified
+
+
+
+
+
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table users {
+  id integer [primary key]
+  first_name varchar
+  last_name varchar
+  email varchar
+  password varchar
+  phone_no varchar
+  work varchar
+  gender text
+  pets varchar
+  driving_license_no varchar
+  date_of_birth date
+  verified boolean [note: "we can use use enum for showing status"]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table properties {
+  id integer [primary key]
+  country_name text
+  house_name varchar
+  Street_name varchar
+  city varchar
+  state varchar
+  pincode varchar
+  property_type text [note: 'house/villa/apartment']
+  stay_area integer [note: 'entire place/room/shared room']
+  description varchar
+  facility_id integer
+  title varchar
+  rule text
+  price decimal 
+  user_id integer
+  approved boolean
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table property_images {
+  id integer [primary key]
+  image blob
+  property_id integer
+}
+
+Table user_bookings {
+  id integer [primary key]
+  check_in date
+  check_out date
+  per_day_rent decimal
+  total_rent decimal
+  gst decimale
+  service_fee decimal
+  status text
+  paid boolean
+  reason varchar
+  user_id integer
+  property_id integer
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table facilities {
+  id integer [primary key]
+  facility varchar [note: 'wifi/cleaning/washing machine']
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table capacities {
+  id integer [primary key]
+  total_guest integer
+  total_room integer
+  total_bed integer
+  total_bathroom integer
+  property_id integer
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table languages {
+  id integer [primary key]
+  type varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table wishlists {
+  id integer [primary key]
+  user_id integer
+  property_id integer  
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table reviews {
+  id integer [primary key]
+  review varchar
+  rating float
+  property_id integer
+  user_id integer
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table transaction {
+  id integer [primary key]
+  user_booking_id integer
+  status text
+  amount decimal
+}
+
+Ref: properties.user_id > users.id // many-to-one
+
+Ref: user_bookings.user_id > users.id //one-to-many
+
+Ref: user_bookings.property_id > properties.id //one-to-many
+
+Ref: properties.facility_id <> facilities.id 
+
+Ref: properties.id - capacities.property_id
+
+Ref: wishlists.user_id <> users.id
+
+Ref: wishlists.property_id > properties.id
+
+Ref: reviews.property_id > properties.id
+
+Ref: reviews.user_id > users.id
+
+Ref: transaction.user_booking_id - user_bookings.id
+
+Ref: property_images.property_id > properties.id
+
+
+
+
+
+
+
+
+
+
+
+

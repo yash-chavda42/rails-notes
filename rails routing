@@ -135,7 +135,7 @@ end
 get 'exit', to: 'sessions#destroy', as: :logout - by define helper path by giving as - logout_path
 
 #HTTP Verb Constraints
--  You can use the match method with the :via option to match multiple verbs at once:
+-  You can use the match method with the  :via option to match multiple verbs at once:
 match 'photos', to: 'photos#show', via: [:get, :post] - get and post both request are work for this action
 match 'photos', to: 'photos#show', via: :all - for all request
 - Routing both GET and POST requests to a single action has security implications. In general, you should avoid routing all verbs to an action unless you have a good reason to.

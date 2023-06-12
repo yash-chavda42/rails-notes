@@ -28,7 +28,7 @@ authenticate_user!: A method that can be used to require authentication before a
 
 #Hash and Array Parameters
 GET /clients?ids[]=1&ids[]=2&ids[]=3 - this is how we can send array
-The value of params[:ids] will now be ["1", "2", "3"] 
+The value of params[:ids] will now be ["1", "2", "3"]                          
 
 #json parameter
 Content-Type" header of your request is set to "application/json"
@@ -45,7 +45,8 @@ Note that default_url_options is typically used for setting default options for 
 
 
 #Session
-Your application has a session for each user in which you can store small amounts of data that will be persisted between requests. The session is only available in the controller and the view and can use one of several of different storage mechanisms
+Your application has a session for each user in which you can store small amounts of data that will be persisted between requests. The session is only available in the controller and the view and can use one 
+of several of different storage mechanisms
 - 4 types of session is there
 ActionDispatch::Session::CookieStore - Stores everything on the client.
 ActionDispatch::Session::CacheStore - Stores the data in the Rails cache.
@@ -80,7 +81,8 @@ before_action :require_login
 skip_before_action
 
 #Request Forgery Protection
-Cross-site request forgery is a type of attack in which a site tricks a user into making requests on another site, possibly adding, modifying, or deleting data on that site without the user's knowledge or permission.
+Cross-site request forgery is a type of attack in which a site tricks a user into making requests on another site, possibly adding, modifying, or deleting data on that site without the user's knowledge or 
+permission.
 to avoid this send non-guessable token which is only known to your server to each request along with login details.
 it's available through the method form_authenticity_token 
 
@@ -110,7 +112,8 @@ headers		- Headers used for the response.
 #HTTP Basic Authentication, HTTP Digest Authentication, HTTP Token Authentication
 - Basic Authentication
 HTTP basic authentication is an authentication scheme that is supported by the majority of browsers and other HTTP clients.
-consider an administration section which will only be available by entering a username, and a password into the browser's HTTP basic dialog window. Using the built-in authentication is quite easy and only requires you to use one method, http_basic_authenticate_with.
+consider an administration section which will only be available by entering a username, and a password into the browser's HTTP basic dialog window. Using the built-in authentication is quite easy and only 
+requires you to use one method, http_basic_authenticate_with.
 This method sends the username and password in base64-encoded format with each request. It is not considered secure because the credentials can be easily decoded, but it is still widely used.
 
 - Digest Authentication
@@ -120,29 +123,36 @@ This method is similar to Basic Authentication but adds an extra level of securi
 This method sends an access token with each request, which is used to authenticate the user. It is considered more secure than Basic Authentication because the access token can be easily revoked.
 
 #Streaming and File Downloads: Sending Files, RESTful Downloads
-Sometimes you may want to send a file to the user instead of rendering an HTML page. All controllers in Rails have the send_data and the send_file methods, which will both stream data to the client. send_file is a convenience method that lets you provide the name of a file on the disk, and it will stream the contents of that file for you.
+Sometimes you may want to send a file to the user instead of rendering an HTML page. All controllers in Rails have the send_data and the send_file methods, which will both stream data to the client. send_file 
+is a convenience method that lets you provide the name of a file on the disk, and it will stream the contents of that file for you.
 
 If you want to send a file that already exists on disk, use the send_file method.
-This will read and stream the file 4 kB at the time, avoiding loading the entire file into memory at once. You can turn off streaming with the :stream option or adjust the block size with the :buffer_size option.
+This will read and stream the file 4 kB at the time, avoiding loading the entire file into memory at once. You can turn off streaming with the :stream option or adjust the block size with the :buffer_size 
+option.
 
 #RESTful Downloads
-While send_data works just fine, if you are creating a RESTful application having separate actions for file downloads is usually not necessary. In REST terminology, the PDF file from the example above can be considered just another representation of the client resource. Rails provides an easy and quite sleek way of doing "RESTful downloads". Here's how you can rewrite the example so that the PDF download is a part of the show action, without any streaming:
+While send_data works just fine, if you are creating a RESTful application having separate actions for file downloads is usually not necessary. In REST terminology, the PDF file from the example above can be 
+considered just another representation of the client resource. Rails provides an easy and quite sleek way of doing "RESTful downloads". Here's how you can rewrite the example so that the PDF download is a part 
+of the show action, without any streaming:
 
 
 #Live Streaming of Arbitrary Data
-Rails allows you to stream more than just files. In fact, you can stream anything you would like in a response object. The ActionController::Live module allows you to create a persistent connection with a browser. Using this module, you will be able to send arbitrary data to the browser at specific points in time.
+Rails allows you to stream more than just files. In fact, you can stream anything you would like in a response object. The ActionController::Live module allows you to create a persistent connection with a 
+browser. Using this module, you will be able to send arbitrary data to the browser at specific points in time.
 There are a couple of things to notice in the above example. We need to make sure to close the response stream. Forgetting to close the stream will leave the socket open forever. 
 
 
 #Log Filtering: Parameters Filtering, Redirects Filtering
-Rails keeps a log file for each environment in the log folder. These are extremely useful when debugging what's actually going on in your application, but in a live application you may not want every bit of information to be stored in the log file.
+Rails keeps a log file for each environment in the log folder. These are extremely useful when debugging what's actually going on in your application, but in a live application you may not want every bit of 
+information to be stored in the log file.
 You can filter out sensitive request parameters from your log files by appending them to config.filter_parameters in the application configuration. These parameters will be marked [FILTERED] in the log.
 
 Sometimes it's desirable to filter out from log files some sensitive locations your application is redirecting to. You can do that by using the config.filter_redirect configuration option:
 
 #Rescue: The Default 500 and 404 Templates, rescue_from
 rescue_from - we can do catching error
-hen an exception occurs which is caught by a rescue_from directive, the exception object is passed to the handler. The handler can be a method or a Proc object passed to the :with option. You can also use a block directly instead of an explicit Proc object.
+then an exception occurs which is caught by a rescue_from directive, the exception object is passed to the handler. The handler can be a method or a Proc object passed to the :with option. You can also use a 
+block directly instead of an explicit Proc object.
 
 #Force HTTPS protocol
 If you'd like to ensure that communication to your controller is only possible via HTTPS, you should do so by enabling the ActionDispatch::SSL middleware via config.force_ssl in your environment configuration.

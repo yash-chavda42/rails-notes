@@ -1,0 +1,102 @@
+1) fetch branch from remote to local
+2) clone
+3) cherrypick
+4) types of events in js *
+5) oninput *F
+6) is ruby pure oop **
+7) features of ruby
+8) ancestors *
+9) variables
+10) types of inheritance
+11) polymorphism
+12) encapsulation
+13) mixins *
+14) compact
+15) constructors
+16) modules
+17) super
+18) when an action is not availabele, what error occurs
+19) render vs redirect
+20) resource vs resources *
+21) flatten
+22) how to fire query for all the models/tables at oe place
+24) strong params ****
+23) error if strong params aren't submitted ****
+24) scope vs class methods ***
+25) after_create vs after_commit
+26) pdf
+27) what is gem **
+28) what is api only applicaton
+29) use of api app
+30) side kiq, redis server
+31) types of syntaxes to render partial
+32) constraints
+33) concerns in controllers models rpoutes **
+34) yield
+35) blank? vs present?
+36) try
+37) what dpo we call testing views
+38) asserts
+39) test runner
+40) fixtures for associated data
+41) let in tests
+42) configurations for internationalization
+43) find vs find_by vs where
+44) group**
+joins vs includes
+45) includes eagerlaods preloads **
+46) generate single query using includes (eager loads generates one query)
+47) Article.includes(:comments).references(:comments) ***
+48) symbol vs string *
+49) == vs ===
+50) proc, block, lambda, methods
+51) migration for has_many thrugh
+52) joins **
+53) subdomain
+54) turbo*
+55) ajax form submission
+56) what does active record object represents
+57) how many ways can we defien an array or hash
+58) migration fr polymorphic association
+59) inverse_of
+60) where do we use symbols in rails app
+61) multiple inheritance ***
+62) prepend
+63) how do the methods work when the module is prepended
+64) rails db:migrate VERSION=[] vs rails db:migrate:up VERSION=[]
+65) change existing migrations
+66) how devise handles session
+67) form_with model vs form_with url
+68) first vs take
+69) what type of operator is '->'
+70) faker
+71) create a new branch without checkout
+72) merge vs rebase
+73) ierators in ruby
+74) where do we use dry concept in rails
+75) cocnern in controller an models
+76) < vs <<
+77) gemfile lock
+78) where can we see dependencies for gems
+79) used gems
+80) polymorphic ***
+81) scope ****
+82) order of callbacks ***
+83) csrf ****
+84) what type of association active storage follows
+85) how to copy all the records to copy to pdf **
+86) pdf ***
+87) quwry to get a hash which has key as the user and posts array as the value
+88) queries using like operator
+89) exists?
+90) any ? vs many?
+91) response to do format
+92) handling exception in controller
+93) form_with , form_for , form_tag ****
+94) how to disable authenticity token in the form ?
+95) turbo frame vs turbo stream
+96) password hashing **
+97) salt in password hashing ?
+98) send image in mail
+99) how to implement token based authentication in api ?
+100) REST ?

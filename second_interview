@@ -1,0 +1,181 @@
+module g
+	def sum
+	end
+end
+
+class Car 
+	exclude g
+end
+
+car=Car.new
+car.sum
+
+Car.sum
+
+attr_reader
+atter_writer
+attr_accesser
+
+overriding - same method 
+class Car
+	def part
+	end
+end
+
+class Bike < Car
+	def part
+	end 
+end
+
+@var 
+@@var 
+
+Orm 
+
+:symbol
+"string"
+
+1=="1" - 
+1==="1"  
+
+do end
+{}
+
+proc {|a| a < 2 }
+
+belongs_to
+has_many
+has_one
+has_and_many_belongs_to
+has_many , through
+has_one, through
+
+class User 
+	has_many :posts
+end
+
+User.posts.first
+
+User.pluck(:email) - 
+User.select(:email) 
+
+joins
+left_outer_joins
+
+user post
+1     1 4
+2
+3
+
+
+User, Post
+user=User.first -
+#10 post
+user.post - 11
+
+include
+preload
+eager_load
+
+rails g migration CreateUserTable
+rails g migration AddNameToUser
+
+users
+User
+Users
+
+csrf - 
+
+form_with
+
+subdomain
+
+devise 
+
+Vehicle
+rails g Vehicle type:string color:string
+
+Car
+Bike
+
+rails g Car --parent=Vehicle
+Class Car < Vehicle
+
+Car.create(color:"red")
+
+
+Params.require(:user).permit(:name,:age)
+
+params[:user][:name]
+
+session[:user_id]=@user.id
+
+debbuger
+pry binding.pry
+
+TDD - test driven devloment 
+BDD - 
+
+turbo drive
+
+first
+
+
+first
+
+User.select("name").group("name").having(sum(price) > 10)
+yash 5
+yash 10
+jay 4
+jay 6
+
+optimestic  - 
+user1 = User.first
+user2 = User.first
+
+user1.name = "demo"
+user2.name = "demo2" #stale
+
+
+
+pestimestic
+user1 = User.first
+
+minitest 
+respec
+
+
+UserMailer.with(user=@user).WelcomeEmail.deliver_now/later
+
+rails g mailer User
+
+
+
+def welcome_email
+	@user = params[:user]
+	mail(to:@user.email, subject:"demo mail")
+end
+
+after_commit_create
+
+User - index
+
+def index
+	user = User.where.not(id:current_user.id)
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

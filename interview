@@ -1,0 +1,21 @@
+Interview.group(:status).count.unscope(:select)
+
+User.select(name:"yash").reselect(number:3)
+
+in optimistic - we have to add lock_version column 
+
+Author, Book
+
+Author.join(:books).where(published:true)
+
+
+
+
+
+
+
+
+
+self join
+objct lifecycle
+n+1 mathods

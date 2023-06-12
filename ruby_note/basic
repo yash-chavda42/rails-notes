@@ -1,0 +1,194 @@
+#What is ruby and how it's different from other programming languages(Java, C++, Python)?
+- Garbage collection -  This means that the garbage collector first marks all of the objects that are still in use. Once all of the objects that are still in use have been marked, the garbage collector then sweeps through the memory and frees up all of the objects that are not marked.
+- Dynamic typing - we can assign any kind of datatype in variable in runtime
+- Metaprogramming -  technique that allows you to write code that generates code. This can be used to create powerful tools and to automate tasks.
+
+#What are the main features of ruby?
+- dry concept
+- Dynemic Typing
+- Garbage collection
+
+IRB(interactive ruby shell)
+- where we can write our ruby code
+
+#Type Casting with the data type, Operators
+var.class - used to find class of object like string
+var.instance_of?(string) - true if var type is string
+type_of(var) - string - this method will also give type of var
+
+"123.50".to_f   #=> 123.5
+Float("123.50") #=> 123.5
+
+123.5.to_s    #=> "123.5"
+String(123.5) #=> "123.5"
+
+"123.50".to_i     #=> 123
+Integer("123.50") #=> 123
+Integer("something") # ArgumentError: invalid value for Integer(): "something"
+
+#string vs symbol
+:test - symbol
+- string are used to work with data and symbol are identifiers.
+- most common use of symbol is represent the method and instance variable.
+- also use symbols as hash_key. string hash is slower than symbol hash.
+- use symbol as names for lable.
+%i(a b c) - symbols array
+%w(a b c) - string array
+- object is of same value is always same but string it is different.
+
+#Read about Array, Hashes, String, DateTime, Time.
+
+
+#Variables(instance/class/local/global)
+instance - @var -  it is accesable in any method of that class
+class - @@var - declare inside class and accessible within the class and all of its subclasses.
+locale - var - Local variables are declared inside a method or block and are only accessible within that method or block.
+global - $var - accessible anywhere in the program.
+
+#Access modifier(public/private/protected)
+public - in this all members are availabe for everyone to modify, we can access it from anywhere.
+private - in this member are accesable inside class. for example we can call it from public method if it is there in same class.
+protected - it just like private accesable via public method in child class and current classes.
+the main difference between private and protected is protected method are accesable in child class by creating object but private not.we can access both method inside public in child class.
+
+#Special Constants in Ruby
+CONSTANT is start with capitle later
+they can only defined out side method
+ABC = 1
+Goo = 2
+Foo = 3
+they are accesable inside class but outside class classname::ABC
+ruby class is constant because first latter is capitle
+contant can change - There is no way to prevent a constant from changing because variables in Ruby are not containers, they are simply pointers to objects.
+
+#Numbers, Symbols, and Comparable  
+- 2 tyeps of number Integer, Float
+- Integer is object of fixnum(32 bit to 64 bit) and bignum(used for big number).
+- float is object of float.
+
+#symbols are created using : and .to_sym method
+puts Symbol.all_symbols.size - total symbol in ruby
+puts Symbol.all_symbols[1, 20] - give symbol one by one
+
+#Control Flow
+- ruby provide some statment in addition to loops, conditionals and iterators, which are used to 	changes the flow of control in program.
+1)break				- used to exit from loop when condition is true. 
+2)next 				- next statment is used to jump to the next iterator of given loop.
+3)redo 				-	used restart the current iteration of loop. it will restart from. 
+4)retry 			- it is restart the current itration.
+5)return 			- thow is used to break the current loop and tranfer control to outside catch block.	
+6)throw/catch	- used to exit from method with value or without value. -> throw :numberError if num < 10
+
+
+#Blocks and Procs and Lambdas
+#https://www.rubyguides.com/2016/02/ruby-procs-and-lambdas/
+- block  	
+- enclose with do/end, {}, it has multiple argument.
+- yield keyword is used for calling block. but it should be in same method which name is given to block.
+- we can also pass argument in yield keyword.
+def method1
+	yield
+	yield 1 - we can also pass argument in block.
+end
+
+method1 { puts "this one is block" }
+method1 { |argument| puts "this one is block" }
+block_given? - method is used to chack block is given or not
+
+- lambda - it is way to define block and its parameters with some special syntax.
+first_lambda = -> {p "this is lambda"} - here instead of -> we can write lambda.  
+first_lambda.call - to call lambda
+first_lambda.()
+first_lambda[]
+first_lambda.===
+second_lambda = -> (x) { x*2 }
+second_lambda.call(2) - we can also pass argument.
+
+-procs
+first_proc = Proc.new {p "my new procs"}
+first_proc.call
+
+
+lamda vs procs
+- in lambda if we pass worng number of argument then it will give error.
+- but in proc it won't give error.
+- in lamda if return then it will return from lambda and proc is return from current context. 
+
+#Iteration, Enumerators 
+- iterator
+1)each		-	return all element from collection. arr.each do |a| p arr end 
+2)collect	-	same as each. 
+3)times		- iterat as may type we want to iterat -> 7.times.do ||
+4)upto		- 4.upto(7) do |n| -> n will be 4 5 6 7.
+5)downto	- 7.downto(4) do |n|	-> n will be 7 6 5 4.
+6)step		- (0..60).step(10) do |i| p i end - it used when used has to skipped some specific range.
+7)each_line - iterat based on new line "hello\nhello"
+
+#Exceptions handling
+#Enumerable in Ruby  - each, each_with_index
+#Method missing, Range, Modules  
+#Duck typing and Monkey patching in ruby
+#Various patterns(star, triangle etc)
+
+1)== 	- return true if two object are equal.
+2)=== 	- ruby classes string, range they their own method in which we can apply this ===
+String === "zen"  # Output: => true
+Range === (1..2)   # Output: => true
+Array === [1,2,3]   # Output: => true
+Integer === 2   # Output: => true
+(1..4) === 3  # Output: => true
+(1..4) === 2.345 # Output: => true
+(1..4) === 6  # Output: => false
+("a".."d") === "c" # Output: => true
+("a".."d") === "e" # Output: => false
+
+3)eql?	- value and object type should be same.
+4)equal?- comare the object_id of both object.
+
+#ancestors - it will give whole ancestor chain.
+childclass, parentclass, Object, Kernel, BasicObject - also retrun module if included.
+
+#monkey patching
+- it means dynamic modification to class that means add new or overwrite existing method at runtime
+- we can block functionality of paticular method
+puts "length".reverse -> provide length of string
+	class String
+		def reverse
+			"reverse blocked"
+		end
+	end
+	puts "length".reverse -> "revrse block"
+		
+#duck typing
+- the concept of duck typeing hold that object capability and behavior should be decide by public interface rather than by its type
+- here we foucs on object capability rather than its class.
+- the concept is duck can quack and swim but there is one another bird it can quack and swim so we are refering that bird as duck.
+class Duck
+end
+class Goose
+end
+class BirdAction
+attr_reader :birds
+	def initialize'
+		@birds = []
+		duck = Duck.new()
+		goose = Goose.new()
+		@birds.push(duck)
+		@birds.push(goose)
+	end
+	
+	def queck
+		birds.each do |bird|
+			bird.quack
+		end
+	end
+	def swim
+		birds.each do |bird|
+			bird.swim
+		end
+	end
+end	
+action = BirdAction.new
+action.quack
+action.swim
+	

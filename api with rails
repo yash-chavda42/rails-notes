@@ -114,12 +114,13 @@ gem 'kaminari' - for pagination add gem
 User.order(:name).page(7).per(50)
 User.order(:name).page(7).per(50).padding(3)
 http://localhost:3000/api/v1/articles?page=1&per_page=4 - this is how we can pass pagination parameter
-
+http://localhost:3000/api/v1/articles/search?name=The Other Side of Silence
 
 
 Note: Keep in mind to use RESTful API
 
-
+rails g serializer user - to create serializer in rails
+serializer is used for store more information on association data. we are only storing id but using serializer we can store other column also.
 
 
 

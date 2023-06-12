@@ -35,7 +35,7 @@ Rails checks that the authenticity_token in the form matches the one that was ge
 #If you have a singular resource, you will need to call resource and resolve for it to work with form_with
 #Dealing with Namespaces
 form_with model: [:admin, @article] - just like admin_article_path(@article)
-
+	
 #how pathch,put and delete work
 most browsers don't support methods other than "GET" and "POST" when it comes to submitting forms.
 Rails works around this issue by emulating other methods over POST with a hidden input named "_method", which is set to reflect the desired method
@@ -71,7 +71,7 @@ In some cases we may want to improve the user experience by grouping related opt
 select_month
 select_day
 select_hour, minute, second
-
+	
 #Choices from a Collection of Arbitrary Objects
 - The collection_select Helper - we can chose city from databse
 <%= form.collection_select :city_id, City.order(:name), :id, :name %>
@@ -117,4 +117,27 @@ form_for - On the other hand, form_for is a higher-level helper method that is u
 
 form_with - form_with is recommended when you want to create a form with additional security features and AJAX functionality.
 
+<%= form.field_for :addresses do |address_form| %>
+	<%= address_form.text_field :street %>
+<% end %>
 
+in model accepts_nested_attributes_for :addresses, allow_destroy: true
+
+params.require(:user).permit(:name, addresses_attributes: [:id, :street])
+
+
+#forms
+form_tag
+- lower level form method which create form only without any model
+- need to define url to where form submitted. 
+- two argument action and method.
+
+form_for 
+- it is for rails 6 older version
+- take model object which is mendatory argument
+
+form_with
+- higher level form builder that provide more integration on model object 
+- we can bind our model with form using model or without model also it will work
+- if we are using restfull resources then it will automatically generate appropriate url for form submission based on current action
+- three argument

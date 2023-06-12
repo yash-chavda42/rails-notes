@@ -1,14 +1,114 @@
 inside model
 validates :name, presence: true.	- data should be present
+
 validates :terms_of_service, acceptance: true	- checkbox should be fill like term and condition.
 validates :terms_of_service, acceptance: { message: 'must be abided' }	- with custom message
-Person.create(name: "John Doe").valid? - to check valid or not.
+Person.create(name: "John Doe").valid? - to check valid or not.   
 .valid? 	- to check valid or not.
-.invalid	- inverse of valid.
-.new_record? 	- it will give true if object is not created before save method
+.invalid?	- inverse of valid.
+.new_record? 	- it will give true if object is initialize means before save method
 save(validate: false) - it will save although without any validation
 any errors found can be accessed through the errors instance method, 
 error is collection of errors
 p.errors.size	- give
+Person.new.errors.[:name].any? - false
+Person.create.errors.[:name].any? - true
 p.errors.objects.first.full_message
 save!  create! 	- give exception if any
+
+#method which are trigger validation
+create
+create!
+save
+save!
+update
+update!
+
+#skipping validation
+decrement
+incremnt
+insert
+upsert
+
+#acceptance
+validates :terms_of_service, accesptance: true
+validates :checkbox, accesptance: {accept:['TRUE','accepted'] ,message: "please fill it"} #accept method define allowed value.
+
+#validate assocation
+validates_associated :books
+- do not write validate_associated on both end becasue it will 
+
+#confirmation
+validates :email, :confirmation: true
+
+in form there should be _confirmation with same field name.
+text_field :email
+text_field :email_confirmation
+
+this check only perform if email_confirmation is not nil so we have to put validation
+validates :email, confirmation: {case_sensitive: true} -means Upperacse and lowercase are different
+validates :email_confirmation, presence: true
+
+#comparision
+validates :start_date, comparison: { greater_than: :end_date}
+greater_than_or_equal_to
+equal_to
+less_than
+other_than
+
+#exclusion - it can not be from the given list
+validates :domain, exclusion: { in:%w(abd fbv ggg), message: "%{value} is not valid" }
+
+#inclusion - value should be from the given option.
+vlidates :domain, inclusion: { in: %w(fgf fff ddd), message: "%{value} is not valid"}
+
+#format
+validates :id, format: { with: //, message: "please maintain format"}
+
+#length
+validates :number, format: {minimum:2, to_short:}
+valiadtes :number, format: {maximum:10, to_long: "%{count} charcter is maximum allowed"}
+validates :number, format: {in:1..10, wrong_length:}
+validates :number, format: {is: 6}
+
+#numericality - it will only allow numeric value integer or float
+validates :number, numericality: true or numericality: { only_integer: true}
+
+#presence
+presence: true
+
+absence: true - pass nil and blank field.	
+inverse_of: :order - when associated record whose absence is required
+
+#uniqueness
+validates: fname, uniqueness: true or {scope: :lname, message: "full name can not be repeated"}
+
+#custom_vlidators - custom validator are classes that inherit from ActiveModel:Validator
+- this class implement validate method which take record as argument and performs validation on it.
+
+#validator
+1)validate_with 
+- allow you to use existing validator classes.
+- take class as its argument and class must have method called validate. that method will be called wach instance of model that is being called. 
+2)validate_each 
+- allow you to define your own custom validation mathod.
+- it takes block as its argument and that block will called each instance of that model that being validated.
+- block take two argument. instance of model and array of error.
+
+#allow_nil: true - it skip validation when value is nil.
+#allow_blank: true - this will let validation pass if value is blank or nil.
+ 
+#errors
+person.errors.messages - 
+person.errors.full_messages - attributes prefix also there.
+strict: true - it will rails exception when object is invalid :Strictvalidationfalied
+person.errors[:name]
+person.errors.where(:name).first.full_message
+errors.empty?
+errors.clear
+
+
+#condition
+validates :name, presence:true, if: :methodname
+
+

@@ -1,11 +1,11 @@
 Action Mailer allows you to send emails from your application using mailer classes and views.
 - Mailers are similar to controllers
 - inherit from ActionMailer::Base
-- live in app/mailers
+- live in app/mail ers
 - they views are app/views, can use layout and partial, params and hashes, instance variable are accesable in view.
 
 #Create the Mailer
-- bin/rails generate mailer User - it will generate usermailer ehich inherit from applicationmailer and it inherit from  actionmailer:base 	
+- bin/rails generate mailer User - it will generate usermailer which inherit from applicationmailer and it inherit from  actionmailer:base 	
 - default from: "from@example.com" -
 - layout 'mailer'
 def welcome_email
@@ -30,6 +30,9 @@ mail - create actual mail itself
 
 #Adding Attachments - using attechment we can add file.
 attachments.inline['image.jpg'] = File.read('/path/to/image.jpg') inside action and in view attachments['image.jpg'].url for attachment.
+
+#add image in email
+<%= image_tag 'image.jpg' %>
 
 #Sending Email To Multiple Recipients - default to: -> { Admin.pluck(:email) } - get all email in array formate. 
 - :cc and :bcc is also used for Cc: and Bcc: 

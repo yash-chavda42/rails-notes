@@ -1,0 +1,234 @@
+#classes and object
+- class is bluprint from which object are created
+- object is also known as intance of classes
+
+#types of vaiable
+var		- local variable which used inside method.
+@var	- instance variable - which accessible across the methods inside classes.
+@@var	- class variable.
+$var 	- global variable.
+#contructor - which is call when object is created
+- it get automatically invoked whenever an instance of class is created.
+- used to initialize instance variable. 
+- it can not inherited.
+- it can not overloaded.
+- return instance of that class.
+- bydefault it is private we can not change it.
+def initialize 
+end
+
+#private classes - private contant is called only with implicit receiver not with explicit receiver
+class A
+	class B
+	end
+end
+- A::B.new.method _name - we can access method of b using this.
+
+class A
+	class B
+	end
+private_constant :B
+end
+- A::B.new.method _name - we can not access because now it is private
+
+- to access private classes we have access as implicit receiver
+class A
+	class B
+		method1
+		end
+	end
+	def access
+		B.new.method1
+	end
+private_constant :B
+end
+
+A-pie - abstraction. polymorphism, inheritance, encapsulation
+
+#freezing object
+- it can not be modified.
+- we can not add, delete and modify its method.
+- syntax -> object.freeze - to freez the object.
+- check  -> object.frozen? - return true else false.
+
+#inheritance - concept of reusability, reuse method
+- it allow classes to inherit characteristics of one class into another.
+- ruby support only single class inheritance.
+- we are using mixin instead of multiple class inheritance. -> the reasone is dimond problem is one child has two parent and both are having same method then which one is going to call?
+- super class - whose charecteristic are inherited by subclass.
+- sub class - the class which is derived from another class it known as derived class or child class.
+- in ruby by default every class has parent class. BasicObject class is super class of all other classes. - using .superclass we can find super class of child.
+
+#super keyword
+- when super class and its sub class has same mathod at that time if want to call 
+def same_method a,b 	a and b is argument
+	super 		 - by default it will pass all the argument means a and b
+	super(a)	 - only pass a
+	super(a,b) - pass and b
+	super()		 - passing nothing	
+end
+obj.same_method
+
+#module - module is collection method, constant and class variable
+- define with module keyword
+- cannot inherit or cannot create subclass
+- object cannot be created from module
+- all the class are module but all the module are not classes.
+- the classes can use namespace, but they can not use mixin like modules
+- module name start with capital latter 
+
+module Abc
+	C=10
+	def Abc.method1
+	end
+end
+Abc::C - access the constant variable
+Abc.method1 - to access the method of module
+
+- define module method with prefix name of module so that we can access directly with module.
+- if we create def method1 then it is consider as instance method so it is not accesable with module name.
+- then we have to include this module inside class and then we can access it using class instance.
+- module is way to reuse method and constant by delaring it one module and reuse them in multiple program.
+- we can defind module in one file and then using require keyword we can use this module in different file.
+
+#mixins
+include and extend both are used to import module inside class. 
+include - we can use module method via class instance.
+extend - we can access module method directly using class name.
+prepand - if we are doing prepand than that module come in first in ancestor chain.
+
+#polymorphism 
+poly - many and morph - forms
+- here excute same method with different object
+- 1)polymorphism using inheritance and 2)polymorphism using Duck-typing
+- polymorphism using inheritance
+class parent
+	def method1
+	end
+end
+class child1 < parent
+	def method1
+	end
+end
+- here method is same on both the classes on child object the child only child method will be called but if child do not have same method it will call parent method.
+- and here for accessing parent method we hava to create parent class object or use super keyword.
+	
+- 2)polymorphism using ducktyping
+- we focus on object capability rather than its class.
+class Hotel
+	def type(who)
+		who.type
+	end
+	
+	def room(who)
+		who.room
+	end	
+end	
+class single
+	def type
+	end
+	def room 
+	end
+end
+class couple
+	def type
+	end
+	def room
+	end
+end
+
+- here using object of single and couple we can access their method from inside hotel class only no need to write seprate line this because same methond name.
+
+#self keyword
+- it is keyword that give access to a current object.
+def method
+	p self
+end
+method -> main 
+- here outputs is self because right now method outside of class so it returning top level object.
+- but if our method is inside class than it will return that class object.
+- it will give you difference between local variable and method. it is not good idea to use same method name and variable but incase if you have used then use self. 
+class A
+	def method1
+		var = 10
+		p var 			- will call variable 
+		p self.var	- will call method
+	end
+	def var
+	end
+end
+- the main use of self keyword is to create class level method that we can directly cal using class name with creating object.
+- here we do not need to write class name so if we change class name then it is does not matter.
+- we can also use it in method to compare the current object with another object
+def ==(object)
+	self == other
+end
+
+#itself - it is method that can call on a object and object will return it self.
+1.itself -> 1 is object 
+- it will filer nil and false value.
+
+#access control
+1)public 2)private 3)protected
+- visibility of instance variable and class variable is always private.
+- access control always applicable in method.
+- we can not apply any access control on class variable and instance variable.
+- in ruby private method is also inherited just like public and protected.
+- public - which can called by anyone, by default all method are public.
+
+- private - not accessible outside class, the method of class can access the private method. 
+- we do not use self keyword in private method
+- also use by inherited class
+
+- protected - also access by class and its subclass.
+- it is similer to private.
+
+- main difference between private and protected methods		
+- private method is accessible from inside class using explicit receiver while private mathod are not.
+class A
+	protected
+	def method1
+	end
+	private
+	def method2
+	end
+end
+class B < A
+	def method3
+		obj = B.new
+		obj.method2 - accessible
+		obj.method1 - not accessible
+	end
+end
+
+#Encapsulation 
+- process of wrapping up data under single unit	
+- it binds code together code and the data it manipulates.
+- it is protective shield that prevents data from being accessed by the code out side of shield.
+- it can be achived by delclaring all variable in the class as private and writing public method for get and set variable.    
+- data hiding - user do not know inner implimantation of the class. he just know that we are passing value to setter method and variable are getting initilized with that value.
+- reusability 
+
+#Data Abstarction	
+- idea of representing significiant details and hiding details of functinality is called data abstarction
+- 1)data abstraction in module 	- module are provide some method, classes for example sqrt() - method - here are puting and non-nagative number and get square root.we do not know inner process.
+- 2)data abstraction in classes -	classes are define that which information is visible and which is not using private, public and protected.
+- 3)data abstraction using accesss control - we can implement using abstarction using this access control.
+
+#getter and setter method
+- this method are allow use to access instance variable of class from outside of class for encapsulation.
+- getter method is used to get value of an instance variable.
+- setter method is used to set value of an instance variable.
+def wesite - getter method
+	@var
+end
+def webiste=(wesite) - setter method
+	@var = website
+end
+- here as class grow we may have many getter and setter methods.
+- that is why ruby provide accessor methods.
+1)attr_reader		-	only read
+2)attr_writer		- only write
+3)attr_accessor	- read and write both 
+- using that accessor we can read and set value from out side of class using object.
+
